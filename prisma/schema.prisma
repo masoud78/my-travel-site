@@ -1,0 +1,548 @@
+// Prisma schema for رِیوان سفر travel agency
+// SQLite for local dev; switch provider to postgresql for production
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// USERS & AUTH (CMS Panel)
+// ============================================
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  passwordHash  String
+  name          String
+  role          String    @default("EDITOR") // SUPER_ADMIN, TOUR_MANAGER, EDITOR, SALES, SEO_MANAGER
+  phone         String?
+  avatar        String?
+  isActive      Boolean   @default(true)
+  lastLoginAt   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  blogPosts     BlogPost[]
+  tours         Tour[]
+  consultants   Consultant?
+}
+
+// ============================================
+// DESTINATIONS (hierarchical: continent > country > city)
+// ============================================
+model Destination {
+  id          String   @id @default(cuid())
+  name        String   // e.g. "آنتالیا"
+  nameEn      String?
+  slug        String   @unique // e.g. "antalya"
+  type        String   // CONTINENT, COUNTRY, CITY, SEASON, MONTH
+  parentId    String?
+  parent      Destination?  @relation("DestinationHierarchy", fields: [parentId], references: [id])
+  children    Destination[] @relation("DestinationHierarchy")
+
+  description String?  // SEO-rich description
+  image       String?
+  podcastUrl  String?  // مقصد podcast audio
+  metaTitle   String?
+  metaDesc    String?
+
+  order       Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tours       Tour[]
+}
+
+// ============================================
+// HOTELS
+// ============================================
+model Hotel {
+  id            String   @id @default(cuid())
+  name          String
+  nameEn        String?
+  stars         Int      // 1-5
+  address       String?
+  description   String?
+  images        String   @default("[]")  // JSON array
+  amenities     String   @default("[]")  // JSON array (Wi-Fi, Pool, ...)
+  latitude      Float?
+  longitude     Float?
+  city          String?
+  country       String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tourHotels    TourHotel[]
+}
+
+// ============================================
+// TRANSPORT (airlines, trains, buses)
+// ============================================
+model Transport {
+  id        String   @id @default(cuid())
+  name      String   // "ایران ایر", "ماهان"
+  type      String   // AIRLINE, TRAIN, BUS, OTHER
+  logo      String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  tours     Tour[]
+}
+
+// ============================================
+// TOURS (main entity)
+// ============================================
+model Tour {
+  id            String   @id @default(cuid())
+  title         String
+  slug          String   @unique
+  shortDesc     String?  // for cards
+  description   String?  // rich text
+  itinerary     String?  // day-by-day JSON
+
+  category      String   // INTERNAL, TURKEY, ASIA, EUROPE, SPECIAL
+  duration      Int      // total days
+  nights        Int      @default(0)
+  transportType String   // PLANE, TRAIN, BUS, ROAD, MIXED
+  startPrice    Float
+
+  destinationId String?
+  destination   Destination? @relation(fields: [destinationId], references: [id])
+  transportId   String?
+  transport     Transport?   @relation(fields: [transportId], references: [id])
+
+  originCity    String?  // مبدأ
+  origins       String   @default("[]") // JSON array of cities (for multi-origin)
+
+  images        String   @default("[]")  // JSON
+  thumbnail     String?
+  podcastUrl    String?  // مشاور سفر podcast
+
+  // included/excluded services
+  includes      String   @default("[]")
+  excludes      String   @default("[]")
+  requirements  String   @default("[]")  // مدارک لازم
+  cancellation  String?  // brief cancellation policy
+
+  // meta
+  isFeatured    Boolean  @default(false)
+  isLastMinute  Boolean  @default(false)
+  status        String   @default("DRAFT") // DRAFT, PUBLISHED, INACTIVE, RUNNING, NOT_RUNNING
+  views         Int      @default(0)
+
+  // SEO
+  metaTitle     String?
+  metaDesc      String?
+  keywords      String?
+
+  authorId      String?
+  author        User?    @relation(fields: [authorId], references: [id])
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  publishedAt   DateTime?
+
+  tourDates     TourDate[]
+  tourHotels    TourHotel[]
+  reviews       Review[]
+  faqs          TourFaq[]
+}
+
+// ============================================
+// TOUR DATES (multiple departures per tour)
+// ============================================
+model TourDate {
+  id          String   @id @default(cuid())
+  tourId      String
+  tour        Tour     @relation(fields: [tourId], references: [id], onDelete: Cascade)
+
+  departDate  DateTime
+  returnDate  DateTime
+  price       Float
+  capacity    Int      @default(0)
+  remaining   Int      @default(0)
+  status      String   @default("AVAILABLE") // AVAILABLE, FULL, CANCELLED
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ============================================
+// TOUR-HOTEL (price per hotel option)
+// ============================================
+model TourHotel {
+  id            String   @id @default(cuid())
+  tourId        String
+  tour          Tour     @relation(fields: [tourId], references: [id], onDelete: Cascade)
+  hotelId       String
+  hotel         Hotel    @relation(fields: [hotelId], references: [id])
+
+  priceDouble   Float    // قیمت دو تخته
+  priceExtra    Float?   // یک نفر اضافه
+  priceChild    Float?   // کودک
+  priceInfant   Float?   // نوزاد
+  notes         String?
+
+  createdAt     DateTime @default(now())
+}
+
+// ============================================
+// FAQ (per tour OR global)
+// ============================================
+model TourFaq {
+  id        String   @id @default(cuid())
+  tourId    String?
+  tour      Tour?    @relation(fields: [tourId], references: [id], onDelete: Cascade)
+
+  question  String
+  answer    String
+  order     Int      @default(0)
+  category  String?  // for global FAQ: BOOKING, PAYMENT, CANCELLATION, VISA, GENERAL
+  isGlobal  Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+// ============================================
+// REVIEWS
+// ============================================
+model Review {
+  id          String   @id @default(cuid())
+  tourId      String?
+  tour        Tour?    @relation(fields: [tourId], references: [id], onDelete: SetNull)
+  blogPostId  String?
+  blogPost    BlogPost? @relation(fields: [blogPostId], references: [id], onDelete: SetNull)
+  postTitle   String?  // denormalized for blog display
+
+  authorName  String
+  authorEmail String?
+  authorPhone String?
+  authorImage String?
+  tourTitle   String?  // denormalized for display when tour deleted
+  rating      Int      // 1-5
+  title       String?
+  content     String
+
+  status      String   @default("PENDING") // PENDING, APPROVED, REJECTED
+  agencyReply String?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ============================================
+// BLOG
+// ============================================
+model BlogPost {
+  id            String   @id @default(cuid())
+  title         String
+  slug          String   @unique
+  excerpt       String?
+  content       String   // markdown / rich html
+  thumbnail     String?
+  readingTime   Int      @default(5)
+
+  category      String   @default("GENERAL")
+  tags          String   @default("[]")
+
+  authorId      String?
+  author        User?    @relation(fields: [authorId], references: [id])
+
+  status        String   @default("DRAFT") // DRAFT, PUBLISHED, ARCHIVED
+  views         Int      @default(0)
+
+  metaTitle     String?
+  metaDesc      String?
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  publishedAt   DateTime?
+  reviews       Review[]
+}
+
+// ============================================
+// CONTACT REQUESTS / CALLBACK FORMS
+// ============================================
+model ContactRequest {
+  id          String   @id @default(cuid())
+  type        String   // CALLBACK, GENERAL, B2B, CUSTOM_TOUR, JOB
+  name        String
+  phone       String
+  email       String?
+  subject     String?
+  message     String?
+  tourId      String?
+  pageUrl     String?
+
+  // For job applications
+  resumeUrl   String?
+  jobTitle    String?
+
+  status      String   @default("NEW") // NEW, IN_PROGRESS, CONTACTED, DONE, REJECTED
+  assignedTo  String?
+  notes       String?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ============================================
+// CONSULTANTS / TEAM
+// ============================================
+model Consultant {
+  id          String   @id @default(cuid())
+  userId      String?  @unique
+  user        User?    @relation(fields: [userId], references: [id])
+
+  name        String
+  title       String   // مشاور تور ترکیه
+  specialty   String?
+  bio         String?
+  avatar      String?
+  phone       String?
+  whatsapp    String?
+  telegram    String?
+
+  workHours   String?  // "شنبه تا چهارشنبه ۹-۱۸"
+  order       Int      @default(0)
+  isActive    Boolean  @default(true)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ============================================
+// BRANCHES
+// ============================================
+model Branch {
+  id          String   @id @default(cuid())
+  name        String
+  address     String
+  phone       String
+  email       String?
+  workHours   String?
+  latitude    Float?
+  longitude   Float?
+  image       String?
+  isMain      Boolean  @default(false)
+  order       Int      @default(0)
+  isActive    Boolean  @default(true)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ============================================
+// PAGES (about, privacy, terms, cancellation, etc.)
+// ============================================
+model Page {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  content     String   // rich html / markdown
+  type        String   @default("STATIC") // STATIC, LANDING, CATEGORY
+
+  // Landing campaign extras
+  campaignBanner String?
+  campaignCta    String?
+
+  // Category / page extras
+  image       String?
+  parentId    String?
+  parent      Page?    @relation("PageHierarchy", fields: [parentId], references: [id])
+  children    Page[]   @relation("PageHierarchy")
+
+  metaTitle   String?
+  metaDesc    String?
+  keywords    String?
+  ogImage     String?
+
+  status      String   @default("PUBLISHED")
+  order       Int      @default(0)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ============================================
+// MENUS (header & footer)
+// ============================================
+model Menu {
+  id        String   @id @default(cuid())
+  location  String   // HEADER, FOOTER, MEGA, MOBILE
+  label     String
+  url       String
+  icon      String?
+  image     String?  // for mega-menu column image
+  parentId  String?
+  parent    Menu?    @relation("MenuTree", fields: [parentId], references: [id])
+  children  Menu[]   @relation("MenuTree")
+  order     Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+}
+
+// ============================================
+// MEDIA LIBRARY (unified gallery + media)
+// ============================================
+model MediaLibrary {
+  id           String   @id @default(cuid())
+  filename     String
+  originalName String?
+  mimeType     String
+  type         String   @default("IMAGE") // IMAGE, VIDEO, AUDIO, FILE
+  category     String?  // free tag for filtering
+  size         Int
+  url          String
+  altText      String?
+  width        Int?
+  height       Int?
+  uploadedBy   String?
+  createdAt    DateTime @default(now())
+}
+
+// ============================================
+// SERVICE TEMPLATES (includes/excludes/requirements/amenities/cancellation)
+// ============================================
+model ServiceTemplate {
+  id       String @id @default(cuid())
+  type     String // INCLUDE, EXCLUDE, REQUIREMENT, AMENITY, CANCELLATION
+  label    String
+  value    String?
+  order    Int    @default(0)
+  isActive Boolean @default(true)
+  createdAt DateTime @default(now())
+}
+
+// ============================================
+// BANNERS / POPUPS
+// ============================================
+model Banner {
+  id        String   @id @default(cuid())
+  title     String
+  subtitle  String?
+  image     String
+  url       String?
+  buttonText String?
+  position  String   // HOME_MAIN, HOME_OFFER, POPUP, ANNOUNCEMENT_BAR
+  startDate DateTime?
+  endDate   DateTime?
+  isActive  Boolean  @default(true)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+}
+
+// ============================================
+// JOBS (open positions)
+// ============================================
+model Job {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  type        String   // FULL_TIME, PART_TIME, REMOTE, INTERN
+  city        String?
+  department  String?
+  description String
+  requirements String?
+  benefits    String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ============================================
+// HOME PAGE BLOCKS (dynamic tour sections)
+// ============================================
+model HomeBlock {
+  id          String  @id @default(cuid())
+  title       String
+  subtitle    String?
+  layout      String  @default("GRID_3") // GRID_3, GRID_4, LIST, CAROUSEL, HERO_CARDS
+  filterType  String  @default("CATEGORY") // CATEGORY, FEATURED, LAST_MINUTE, DESTINATION, CUSTOM
+  filterValue String? // e.g. category slug or destination slug or tour IDs JSON
+  order       Int     @default(0)
+  isActive    Boolean @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ============================================
+// SITE MENUS (header/footer/mobile + branding)
+// ============================================
+model MenuSetting {
+  id       String @id @default(cuid())
+  location String @unique // HEADER, FOOTER, MOBILE
+  logo     String?
+  title    String?
+  subtitle String?
+  isActive Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ============================================
+// GALLERY
+// ============================================
+model GalleryItem {
+  id          String   @id @default(cuid())
+  title       String?
+  image       String
+  thumbnail   String?
+  destination String?  // tag
+  tourId      String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+}
+
+// ============================================
+// MEDIA APPEARANCES (logos of media that featured agency)
+// ============================================
+model MediaLogo {
+  id        String   @id @default(cuid())
+  name      String
+  logo      String
+  url       String?
+  order     Int      @default(0)
+  isActive  Boolean  @default(true)
+}
+
+// ============================================
+// SITE SETTINGS (key-value store)
+// ============================================
+model Setting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String
+  group     String   @default("GENERAL") // GENERAL, CONTACT, SEO, SOCIAL, APPEARANCE
+  type      String   @default("TEXT")    // TEXT, NUMBER, BOOLEAN, JSON, IMAGE
+  label     String?
+  updatedAt DateTime @updatedAt
+}
+
+// ============================================
+// REDIRECTS (301/302)
+// ============================================
+model Redirect {
+  id          String   @id @default(cuid())
+  fromPath    String   @unique
+  toPath      String
+  statusCode  Int      @default(301)
+  isActive    Boolean  @default(true)
+  hitCount    Int      @default(0)
+  createdAt   DateTime @default(now())
+}
+
+// ============================================
+// NEWSLETTER
+// ============================================
+model Newsletter {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+}

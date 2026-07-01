@@ -1,0 +1,270 @@
+@import "tailwindcss";
+
+/* ============================================
+   ریوان سفر — Design System
+   روان‌شناسی رنگ: اعتماد (آبی عمیق) + اشتیاق (نارنجی) + طبیعت/سفر (فیروزه‌ای)
+   ============================================ */
+
+@theme {
+  /* ---- Font ---- */
+  --font-sans: var(--font-vazirmatn), system-ui, -apple-system, "Segoe UI", Tahoma, sans-serif;
+
+  /* ---- Brand Colors ---- */
+  --color-brand-50: #f0f9ff;
+  --color-brand-100: #e0f2fe;
+  --color-brand-200: #bae6fd;
+  --color-brand-300: #7dd3fc;
+  --color-brand-400: #38bdf8;
+  --color-brand-500: #0ea5e9;
+  --color-brand-600: #0284c7;
+  --color-brand-700: #0369a1;
+  --color-brand-800: #075985;
+  --color-brand-900: #0c4a6e;
+  --color-brand-950: #082f49;
+
+  /* ---- Accent (Orange — CTA) ---- */
+  --color-accent-50: #fff7ed;
+  --color-accent-100: #ffedd5;
+  --color-accent-200: #fed7aa;
+  --color-accent-300: #fdba74;
+  --color-accent-400: #fb923c;
+  --color-accent-500: #f97316;
+  --color-accent-600: #ea580c;
+  --color-accent-700: #c2410c;
+  --color-accent-800: #9a3412;
+  --color-accent-900: #7c2d12;
+
+  /* ---- Teal (Accent — Travel/Nature) ---- */
+  --color-teal-50: #f0fdfa;
+  --color-teal-100: #ccfbf1;
+  --color-teal-500: #14b8a6;
+  --color-teal-600: #0d9488;
+  --color-teal-700: #0f766e;
+
+  /* ---- Neutral (Stone — softer than slate) ---- */
+  --color-surface: #fafaf9;
+  --color-surface-soft: #f5f5f4;
+  --color-surface-mute: #e7e5e4;
+  --color-ink: #1c1917;
+  --color-ink-soft: #44403c;
+  --color-ink-mute: #78716c;
+
+  /* ---- Semantic (shadcn-compatible) ---- */
+  --color-background: var(--color-surface);
+  --color-foreground: var(--color-ink);
+
+  --color-card: #ffffff;
+  --color-card-foreground: var(--color-ink);
+
+  --color-primary: #0c4a6e;          /* brand-900 deep trust blue */
+  --color-primary-foreground: #ffffff;
+  --color-primary-50: #f0f9ff;
+  --color-primary-100: #e0f2fe;
+  --color-primary-200: #bae6fd;
+  --color-primary-300: #7dd3fc;
+  --color-primary-400: #38bdf8;
+  --color-primary-500: #0ea5e9;
+  --color-primary-600: #0284c7;
+  --color-primary-700: #0369a1;
+  --color-primary-800: #075985;
+  --color-primary-900: #0c4a6e;
+  --color-primary-950: #082f49;
+
+  --color-secondary: #f97316;        /* accent-500 energetic orange */
+  --color-secondary-foreground: #ffffff;
+  --color-secondary-50: #fff7ed;
+  --color-secondary-100: #ffedd5;
+  --color-secondary-200: #fed7aa;
+  --color-secondary-300: #fdba74;
+  --color-secondary-400: #fb923c;
+  --color-secondary-500: #f97316;
+  --color-secondary-600: #ea580c;
+  --color-secondary-700: #c2410c;
+  --color-secondary-800: #9a3412;
+  --color-secondary-900: #7c2d12;
+
+  --color-accent: #14b8a6;           /* teal-500 */
+  --color-accent-foreground: #ffffff;
+  --color-accent-50: #f0fdfa;
+  --color-accent-100: #ccfbf1;
+  --color-accent-200: #99f6e0;
+  --color-accent-300: #5eead4;
+  --color-accent-400: #2dd4bf;
+  --color-accent-500: #14b8a6;
+  --color-accent-600: #0d9488;
+  --color-accent-700: #0f766e;
+  --color-accent-800: #115e59;
+  --color-accent-900: #134e4a;
+
+  --color-muted: var(--color-surface-soft);
+  --color-muted-foreground: var(--color-ink-mute);
+
+  --color-destructive: #dc2626;
+  --color-destructive-foreground: #ffffff;
+
+  --color-popover: #ffffff;
+  --color-popover-foreground: var(--color-ink);
+
+  --color-input: #e7e5e4;
+  --color-border: #e7e5e4;
+  --color-ring: var(--color-primary-500);
+
+  /* ---- Semantic ---- */
+  --color-success: #16a34a;
+  --color-warning: #ca8a04;
+  --color-danger: #dc2626;
+
+  /* ---- Radius ---- */
+  --radius-xs: 0.25rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-2xl: 2rem;
+
+  /* ---- Shadow ---- */
+  --shadow-soft: 0 1px 2px 0 rgb(0 0 0 / 0.05), 0 1px 3px 0 rgb(0 0 0 / 0.05);
+  --shadow-card: 0 4px 6px -1px rgb(12 74 110 / 0.08), 0 2px 4px -2px rgb(12 74 110 / 0.04);
+  --shadow-float: 0 20px 25px -5px rgb(12 74 110 / 0.12), 0 8px 10px -6px rgb(12 74 110 / 0.06);
+}
+
+/* ============================================
+   Base
+   ============================================ */
+:root {
+  color-scheme: light;
+}
+
+html {
+  direction: rtl;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-feature-settings: "ss02", "cv11";
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
+
+/* اعداد فارسی (اختیاری در نقاط خاص) */
+.num-fa {
+  font-feature-settings: "ss02";
+}
+
+/* اعداد لاتین (برای قیمت و تاریخ‌های فنی) */
+.num-en {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ============================================
+   Focus / Accessibility
+   ============================================ */
+:focus-visible {
+  outline: 2px solid var(--color-brand-500);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ============================================
+   Scrollbar
+   ============================================ */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-surface-soft);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-surface-mute);
+  border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-ink-mute);
+}
+
+/* ============================================
+   Typography Helpers
+   ============================================ */
+.prose-fa h1,
+.prose-fa h2,
+.prose-fa h3,
+.prose-fa h4 {
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--color-ink);
+}
+.prose-fa h2 { font-size: 1.5rem; margin-block: 1.5em 0.75em; }
+.prose-fa h3 { font-size: 1.25rem; margin-block: 1.25em 0.5em; }
+.prose-fa p {
+  line-height: 1.9;
+  color: var(--color-ink-soft);
+  margin-block: 0.75em;
+}
+.prose-fa ul, .prose-fa ol {
+  padding-inline-start: 1.5rem;
+  line-height: 1.9;
+}
+.prose-fa li { margin-block: 0.25em; }
+.prose-fa a {
+  color: var(--color-brand-700);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ============================================
+   Animations
+   ============================================ */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-up {
+  animation: fade-up 0.4s ease-out;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg,
+    var(--color-surface-soft) 0%,
+    var(--color-surface-mute) 50%,
+    var(--color-surface-soft) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* ============================================
+   Utilities
+   ============================================ */
+.container-fluid {
+  width: 100%;
+  margin-inline: auto;
+  padding-inline: 1rem;
+  max-width: 1280px;
+}
+
+@media (min-width: 640px) {
+  .container-fluid { padding-inline: 1.5rem; }
+}
+@media (min-width: 1024px) {
+  .container-fluid { padding-inline: 2rem; }
+}
+
+/* Hide scrollbar but keep functionality */
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
