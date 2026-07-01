@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Plus, Clock, Filter, ChevronRight, ChevronLeft } from "lucide-react";
+import { Plus, Pencil, Trash2, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -18,6 +18,7 @@ import { DataTable } from "@/components/admin/data-table";
 import { FormModal } from "@/components/admin/form-modal";
 import { DeleteDialog } from "@/components/admin/delete-dialog";
 import { ImagePicker } from "@/components/admin/image-picker";
+import { RichTextEditor } from "@/components/admin/rich-text-editor";
 import { StatusBadge } from "@/components/admin/status-badge";
 import {
   getDestinations,
@@ -25,7 +26,7 @@ import {
   updateDestination,
   deleteDestination,
 } from "@/lib/admin-actions";
-import { slugify } from "@/lib/utils";
+import { formatNumber, slugify } from "@/lib/utils";
 
 type Destination = Awaited<ReturnType<typeof getDestinations>>[number];
 
@@ -431,12 +432,11 @@ export default function AdminDestinationsClient({
           </div>
 
           <div className="space-y-2 md:col-span-2">
-            <Label>توضیحات</Label>
-            <Textarea
+            <RichTextEditor
+              label="توضیحات"
               value={form.description}
-              onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
+              onChange={(v) => setForm((f) => ({ ...f, description: v }))}
               placeholder="توضیحات سئو‌محور درباره مقصد"
-              rows={4}
             />
           </div>
 

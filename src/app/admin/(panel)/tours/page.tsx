@@ -1,4 +1,4 @@
-import { getTours, getDestinations, getTransports } from "@/lib/admin-actions";
+import { getTours, getDestinations, getTransports, getServiceTemplates } from "@/lib/admin-actions";
 import { Suspense } from "react";
 import ToursClient from "./tours-client";
 import { redirect } from "next/navigation";
@@ -14,10 +14,11 @@ export default async function AdminToursPage({
   const user = await getCurrentUser();
   if (!user || !hasPermission(user.role as Role, "tours.read")) redirect("/admin/login");
 
-  const [tours, destinations, transports] = await Promise.all([
+  const [tours, destinations, transports, serviceTemplates] = await Promise.all([
     getTours(),
     getDestinations(),
     getTransports(),
+    getServiceTemplates(),
   ]);
 
   return (
@@ -26,6 +27,7 @@ export default async function AdminToursPage({
         initialTours={tours}
         initialDestinations={destinations}
         initialTransports={transports}
+        serviceTemplates={serviceTemplates}
         create={create}
       />
     </Suspense>

@@ -40,6 +40,7 @@ import {
   Phone,
   Star,
   AlertCircle,
+  ArrowLeft,
 } from "lucide-react";
 
 interface TourDetailPageProps {

@@ -18,6 +18,8 @@ import { DataTable } from "@/components/admin/data-table";
 import { FormModal } from "@/components/admin/form-modal";
 import { DeleteDialog } from "@/components/admin/delete-dialog";
 import { ImagePicker } from "@/components/admin/image-picker";
+import { RichTextEditor } from "@/components/admin/rich-text-editor";
+import { TemplateSelector, type ServiceTemplate } from "@/components/admin/template-selector";
 import type { MediaItem } from "@/components/admin/media-gallery";
 import { StatusBadge } from "@/components/admin/status-badge";
 import {
@@ -31,6 +33,7 @@ import {
   createTourDate,
   updateTourDate,
   deleteTourDate,
+  getServiceTemplates,
 } from "@/lib/admin-actions";
 import { formatDateTime } from "@/lib/jalali";
 import { toFa, formatPrice } from "@/lib/utils";
@@ -166,13 +169,13 @@ export default function ToursClient({
   initialTours,
   initialDestinations,
   initialTransports,
-  media,
+  serviceTemplates = [],
   create,
 }: {
   initialTours: Tour[];
   initialDestinations: Destination[];
   initialTransports: Transport[];
-  media: MediaItem[];
+  serviceTemplates?: ServiceTemplate[];
   create?: boolean;
 }) {
   const [tours, setTours] = useState<Tour[]>(initialTours);
@@ -527,12 +530,11 @@ export default function ToursClient({
           </div>
 
           <div className="space-y-2 lg:col-span-3">
-            <Label>توضیحات کامل</Label>
-            <Textarea
+            <RichTextEditor
+              label="توضیحات کامل"
               value={form.description}
-              onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
+              onChange={(v) => setForm((f) => ({ ...f, description: v }))}
               placeholder="جزئیات تور، خدمات، برنامه سفر..."
-              rows={5}
             />
           </div>
 
@@ -692,52 +694,57 @@ export default function ToursClient({
           </div>
 
           <div className="space-y-2">
-            <Label>شهرهای مبدأ (هر خط یکی)</Label>
-            <Textarea
+            <TemplateSelector
+              type="ORIGIN"
+              label="شهرهای مبدأ"
+              templates={serviceTemplates}
               value={form.origins}
-              onChange={(e) => setForm((f) => ({ ...f, origins: e.target.value }))}
-              placeholder="تهران&#10;مشهد"
-              rows={3}
+              onChange={(v) => setForm((f) => ({ ...f, origins: v }))}
+              placeholder="تهران"
             />
           </div>
 
           <div className="space-y-2">
-            <Label>خدمات شامل (هر خط یکی)</Label>
-            <Textarea
+            <TemplateSelector
+              type="INCLUDE"
+              label="خدمات شامل"
+              templates={serviceTemplates}
               value={form.includes}
-              onChange={(e) => setForm((f) => ({ ...f, includes: e.target.value }))}
-              placeholder="بلیط رفت و برگشت&#10;هتل ۵ ستاره"
-              rows={3}
+              onChange={(v) => setForm((f) => ({ ...f, includes: v }))}
+              placeholder="بلیط رفت و برگشت"
             />
           </div>
 
           <div className="space-y-2">
-            <Label>خدمات غیرشامل (هر خط یکی)</Label>
-            <Textarea
+            <TemplateSelector
+              type="EXCLUDE"
+              label="خدمات غیرشامل"
+              templates={serviceTemplates}
               value={form.excludes}
-              onChange={(e) => setForm((f) => ({ ...f, excludes: e.target.value }))}
-              placeholder="ویزا&#10;بیمه مسافرتی"
-              rows={3}
+              onChange={(v) => setForm((f) => ({ ...f, excludes: v }))}
+              placeholder="ویزا"
             />
           </div>
 
           <div className="space-y-2 lg:col-span-3">
-            <Label>مدارک لازم (هر خط یکی)</Label>
-            <Textarea
+            <TemplateSelector
+              type="REQUIREMENT"
+              label="مدارک لازم"
+              templates={serviceTemplates}
               value={form.requirements}
-              onChange={(e) => setForm((f) => ({ ...f, requirements: e.target.value }))}
-              placeholder="پاسپورت با ۶ ماه اعتبار..."
-              rows={2}
+              onChange={(v) => setForm((f) => ({ ...f, requirements: v }))}
+              placeholder="پاسپورت با ۶ ماه اعتبار"
             />
           </div>
 
           <div className="space-y-2 lg:col-span-3">
-            <Label>شرایط کنسلی</Label>
-            <Textarea
+            <TemplateSelector
+              type="CANCELLATION"
+              label="شرایط کنسلی"
+              templates={serviceTemplates}
               value={form.cancellation}
-              onChange={(e) => setForm((f) => ({ ...f, cancellation: e.target.value }))}
+              onChange={(v) => setForm((f) => ({ ...f, cancellation: v }))}
               placeholder="توضیح کوتاه شرایط کنسلی"
-              rows={2}
             />
           </div>
 
