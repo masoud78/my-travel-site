@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Plus, Clock, Star } from "lucide-react";
+import { Plus, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -10,7 +10,10 @@ import { DataTable } from "@/components/admin/data-table";
 import { FormModal } from "@/components/admin/form-modal";
 import { DeleteDialog } from "@/components/admin/delete-dialog";
 import { StatusBadge } from "@/components/admin/status-badge";
-import { getHotels, createHotel, updateHotel, deleteHotel } from "@/lib/admin-actions";
+import { RichTextEditor } from "@/components/admin/rich-text-editor";
+import { TemplateSelector, type ServiceTemplate } from "@/components/admin/template-selector";
+import { getHotels, createHotel, updateHotel, deleteHotel, getServiceTemplates } from "@/lib/admin-actions";
+import { formatNumber } from "@/lib/utils";
 
 type Hotel = Awaited<ReturnType<typeof getHotels>>[number];
 
@@ -51,6 +54,7 @@ function toArray(value: string): string[] {
 
 export default function AdminHotelsPage() {
   const [hotels, setHotels] = useState<Hotel[]>([]);
+  const [serviceTemplates, setServiceTemplates] = useState<ServiceTemplate[]>([]);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState<Hotel | null>(null);
@@ -62,9 +66,10 @@ export default function AdminHotelsPage() {
   useEffect(() => {
     let mounted = true;
     async function init() {
-      const data = await getHotels();
+      const [data, templates] = await Promise.all([getHotels(), getServiceTemplates()]);
       if (!mounted) return;
       setHotels(data);
+      setServiceTemplates(templates);
       setLoading(false);
     }
     init();
