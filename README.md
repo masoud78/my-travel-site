@@ -241,13 +241,36 @@ npm run dev
 ```
 
 ### Vercel
-1. Push کد به GitHub
-2. Import در Vercel
-3. تنظیم Environment Variables:
-   - `DATABASE_URL`
-   - `NEXTAUTH_SECRET`
-   - `NEXT_PUBLIC_SITE_URL`
-4. Deploy
+
+۱. Push کد به GitHub
+۲. Import پروژه در [vercel.com](https://vercel.com)
+۳. **قبل از اولین deploy**، در Settings → Environment Variables این متغیرها رو اضافه کن:
+
+| متغیر | مقدار نمونه |
+|---|---|
+| `DATABASE_URL` | `postgresql://postgres:PASSWORD@remote-fanhab.runflare.com:30224/rivansaferx_db?schema=public&sslmode=require` |
+| `NEXTAUTH_SECRET` | یک رشته تصادفی قوی (حداقل ۳۲ کاراکتر) |
+| `NEXTAUTH_URL` | `https://your-domain.vercel.app` |
+| `NEXT_PUBLIC_SITE_URL` | `https://your-domain.vercel.app` |
+| `NEXT_PUBLIC_SITE_NAME` | `ریوان سفر` |
+
+۴. **Build Command** را روی دستور زیر تنظیم کن:
+```bash
+npm run vercel-build
+```
+
+۵. اولین deploy را انجام بده. اگر ارور `Can't reach database server` دیدی، یعنی Vercel نمی‌تواند به Runflare وصل شود. در آن صورت باید دیتابیس را به **Neon** یا **Supabase** منتقل کنی.
+
+۶. بعد از اولین deploy موفق، برای ایجاد جداول در دیتابیس، migration را اجرا کن (از Vercel CLI):
+```bash
+vercel env pull
+npx prisma migrate deploy
+```
+
+۷. برای پر کردن دیتابیس با داده‌های اولیه:
+```bash
+npx prisma db seed
+```
 
 ### سرور شخصی
 ```bash
