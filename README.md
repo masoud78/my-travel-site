@@ -210,10 +210,19 @@ npm run db:reset     # reset دیتابیس
 
 ۱. به https://neon.tech برو و ثبت‌نام کن.
 ۲. یک پروژه جدید بساز: نام `rivansafar`، region نزدیک (مثلاً `Frankfurt` یا `Stockholm`).
-۳. بعد از ساخت، از بخش **Connection Details** رشته اتصال PostgreSQL را کپی کن:
+۳. بعد از ساخت، از بخش **Connection Details** این دو رشته را کپی کن:
+
+| نوع | نام متغیر | کاربرد |
+|---|---|---|
+| Pooled connection | `POSTGRES_PRISMA_URL` | برای Prisma Client در runtime |
+| Direct connection | `POSTGRES_URL_NON_POOLING` | برای migration و seed |
 
 ```bash
-postgresql://user:password@ep-xxxxx.eu-central-1.aws.neon.tech/rivansafar?sslmode=require
+# Pooled
+postgresql://user:password@ep-xxxxx-pooler.eu-central-1.aws.neon.tech/rivansafar?sslmode=require&pgbouncer=true&connect_timeout=10
+
+# Direct
+postgresql://user:password@ep-xxxxx.eu-central-1.aws.neon.tech/rivansafar?sslmode=require&connect_timeout=10
 ```
 
 ### ۲- تنظیم Environment Variables در Vercel
@@ -222,7 +231,8 @@ postgresql://user:password@ep-xxxxx.eu-central-1.aws.neon.tech/rivansafar?sslmod
 
 | متغیر | مقدار |
 |---|---|
-| `DATABASE_URL` | `postgresql://USER:PASSWORD@ep-xxxxx.eu-central-1.aws.neon.tech/rivansafar?sslmode=require` |
+| `POSTGRES_PRISMA_URL` | `postgresql://USER:PASSWORD@ep-xxxxx-pooler.eu-central-1.aws.neon.tech/rivansafar?sslmode=require&pgbouncer=true&connect_timeout=10` |
+| `POSTGRES_URL_NON_POOLING` | `postgresql://USER:PASSWORD@ep-xxxxx.eu-central-1.aws.neon.tech/rivansafar?sslmode=require&connect_timeout=10` |
 | `NEXTAUTH_SECRET` | یک رشته تصادفی قوی حداقل ۳۲ کاراکتر |
 | `NEXTAUTH_URL` | `https://your-domain.vercel.app` |
 | `NEXT_PUBLIC_SITE_URL` | `https://your-domain.vercel.app` |
