@@ -36,7 +36,7 @@ export function SimilarToursCarousel({ tours }: SimilarToursProps) {
             <ChevronLeft className="w-5 h-5" />
           </button>
           <span className="text-sm text-stone-500">
-            {page + 1} / {totalPages}
+            {formatNumber(page + 1)} / {formatNumber(totalPages)}
           </span>
           <button
             type="button"

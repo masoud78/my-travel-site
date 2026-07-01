@@ -3,6 +3,7 @@
 import { useEffect, useCallback } from "react";
 import Image from "next/image";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import { formatNumber } from "@/lib/utils";
 
 interface LightboxProps {
   images: { src: string; alt: string }[];
@@ -88,7 +89,7 @@ export function Lightbox({ images, currentIndex, isOpen, onClose, onNext, onPrev
       </div>
 
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white text-sm bg-white/10 px-4 py-2 rounded-full">
-        {currentIndex + 1} / {images.length}
+        {formatNumber(currentIndex + 1)} / {formatNumber(images.length)}
       </div>
     </div>
   );

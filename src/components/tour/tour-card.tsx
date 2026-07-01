@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Clock, Plane, Calendar, MapPin, Headphones, Star, Zap } from "lucide-react";
-import { formatPrice } from "@/lib/utils";
+import { formatPrice, formatNumber } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 
 export interface TourCardData {
@@ -100,7 +100,7 @@ export function TourCard({ tour }: TourCardProps) {
         <div className="flex flex-wrap items-center gap-2 text-[11px] text-stone-500">
           <span className="flex items-center gap-1">
             <Clock className="w-3 h-3" />
-            {tour.duration} شب
+            {formatNumber(tour.duration)} شب
           </span>
           <span className="flex items-center gap-1">
             <Plane className="w-3 h-3" />
