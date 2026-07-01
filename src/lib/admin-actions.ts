@@ -1020,7 +1020,10 @@ export async function getActiveHomeBlocks() {
 
 export async function createHomeBlock(data: HomeBlockInput) {
   await requireAuth();
-  return prisma.homeBlock.create({ data });
+  const block = await prisma.homeBlock.create({ data });
+  revalidatePath("/admin/home-blocks");
+  revalidatePath("/");
+  return block;
 }
 
 export async function updateHomeBlock(id: string, data: Partial<HomeBlockInput>) {
@@ -1058,12 +1061,20 @@ export async function upsertMenuSetting(data: MenuSettingInput) {
   await requireAuth();
   const existing = await prisma.menuSetting.findUnique({ where: { location: data.location } });
   if (existing) {
-    return prisma.menuSetting.update({ where: { location: data.location }, data });
+    const updated = await prisma.menuSetting.update({ where: { location: data.location }, data });
+    revalidatePath("/admin/menus");
+    revalidatePath("/");
+    return updated;
   }
-  return prisma.menuSetting.create({ data });
+  const created = await prisma.menuSetting.create({ data });
+  revalidatePath("/admin/menus");
+  revalidatePath("/");
+  return created;
 }
 
 export async function deleteMenuSetting(id: string) {
   await requireAuth();
   await prisma.menuSetting.delete({ where: { id } });
+  revalidatePath("/admin/menus");
+  revalidatePath("/");
 }

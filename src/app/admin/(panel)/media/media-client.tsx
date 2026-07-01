@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState, useTransition, useRef, useCallback } from "react";
-import { Upload, Link2, Search, Trash2, X, FileText, Music, Video, ImageIcon, FileQuestion, FolderOpen, Copy, ExternalLink } from "lucide-react";
+import { Upload, Search, Trash2, X, FileText, Music, Video, ImageIcon, FileQuestion, FolderOpen, Copy, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,7 +12,7 @@ import { FormModal } from "@/components/admin/form-modal";
 import { DeleteDialog } from "@/components/admin/delete-dialog";
 import { createMedia, deleteMedia } from "@/lib/admin-actions";
 import { toFa, formatDateTime } from "@/lib/jalali";
-import { formatPrice } from "@/lib/utils";
+import { formatBytes, cn } from "@/lib/utils";
 import type { MediaLibrary } from "@prisma/client";
 
 const MEDIA_TYPES: { value: string; label: string }[] = [
@@ -55,14 +55,6 @@ function guessMimeFromUrl(url: string): string {
     case "pdf": return "application/pdf";
     default: return "image/jpeg";
   }
-}
-
-function formatBytes(bytes: number): string {
-  if (bytes === 0) return "۰ بایت";
-  const k = 1024;
-  const sizes = ["بایت", "کیلوبایت", "مگابایت", "گیگابایت"];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return `${toFa((bytes / Math.pow(k, i)).toFixed(1))} ${sizes[i]}`;
 }
 
 function typeLabel(type: string): string {
@@ -407,9 +399,10 @@ export function MediaClient({ data, canManage }: { data: MediaLibrary[]; canMana
                 onDrop={handleDrop}
                 onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
                 onDragLeave={() => setIsDragging(false)}
-                className={`cursor-pointer rounded-xl border-2 border-dashed p-6 text-center transition-colors ${
-                  isDragging ? "border-primary bg-primary/5" : "border-stone-300 bg-stone-50 hover:border-primary/50"
-                }`}
+                className={cn(
+                "cursor-pointer rounded-xl border-2 border-dashed p-6 text-center transition-colors",
+                isDragging ? "border-primary bg-primary/5" : "border-stone-300 bg-stone-50 hover:border-primary/50"
+              )}
               >
                 <Upload className="w-8 h-8 mx-auto mb-2 text-stone-400" />
                 <p className="text-sm font-medium text-stone-700">فایل‌ها را اینجا رها کنید یا کلیک کنید</p>

@@ -17,8 +17,10 @@ import {
   Users,
   LogOut,
   ChevronLeft,
+  GalleryHorizontal,
   ImageIcon,
   Tags,
+  Sparkles,
 } from "lucide-react";
 
 interface AdminSidebarProps {
@@ -86,6 +88,19 @@ export function AdminSidebar({ user, logoutAction }: AdminSidebarProps) {
             </Link>
           );
         })}
+        <Link
+          href="/admin/home-blocks"
+          className={`flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
+            pathname === "/admin/home-blocks"
+              ? "bg-primary-50 text-primary shadow-sm"
+              : "text-stone-600 hover:bg-stone-50 hover:text-stone-900"
+          }`}
+        >
+          <span className="flex items-center gap-3">
+            <Sparkles className={`w-5 h-5 ${pathname === "/admin/home-blocks" ? "text-primary" : "text-stone-400"}`} />
+            بلوک‌های صفحه اصلی
+          </span>
+        </Link>
       </nav>
 
       <div className="p-4 border-t border-stone-100 bg-stone-50/50">

@@ -503,6 +503,75 @@ async function main() {
   }
   console.log("✅ Settings created");
 
+  // 15. Service templates
+  const templateData = [
+    // Includes
+    { type: "INCLUDE", label: "پرواز/قطار رفت و برگشت" },
+    { type: "INCLUDE", label: "اقامت در هتل انتخابی" },
+    { type: "INCLUDE", label: "صبحانه" },
+    { type: "INCLUDE", label: "صبحانه و شام" },
+    { type: "INCLUDE", label: "ترانسفر فرودگاهی" },
+    { type: "INCLUDE", label: "بیمه مسافرتی" },
+    { type: "INCLUDE", label: "راهنمای فارسی‌زبان" },
+    { type: "INCLUDE", label: "گشت شهری به همراه راهنما" },
+    { type: "INCLUDE", label: "ویزا" },
+    { type: "INCLUDE", label: "سیم‌کارت محلی" },
+    // Excludes
+    { type: "EXCLUDE", label: "ویزا (در صورت نیاز)" },
+    { type: "EXCLUDE", label: "ناهار و شام (مگر ذکر شده)" },
+    { type: "EXCLUDE", label: "بازدیدهای اختیاری" },
+    { type: "EXCLUDE", label: "هزینه‌های شخصی" },
+    { type: "EXCLUDE", label: "انعام و صدقات" },
+    { type: "EXCLUDE", label: "بیمه بیماری‌های خاص" },
+    // Requirements
+    { type: "REQUIREMENT", label: "گذرنامه با ۶ ماه اعتبار" },
+    { type: "REQUIREMENT", label: "عکس ۴×۶ رنگی" },
+    { type: "REQUIREMENT", label: "کارت واکسن یا تست در صورت لزوم" },
+    { type: "REQUIREMENT", label: "کارت ملی" },
+    { type: "REQUIREMENT", label: "شناسنامه" },
+    { type: "REQUIREMENT", label: "ویزای شینگن (برای اروپا)" },
+    // Origin cities
+    { type: "ORIGIN", label: "تهران" },
+    { type: "ORIGIN", label: "مشهد" },
+    { type: "ORIGIN", label: "اصفهان" },
+    { type: "ORIGIN", label: "شیراز" },
+    { type: "ORIGIN", label: "تبریز" },
+    { type: "ORIGIN", label: "کیش" },
+    // Amenities (hotels)
+    { type: "AMENITY", label: "اینترنت رایگان" },
+    { type: "AMENITY", label: "استخر" },
+    { type: "AMENITY", label: "سالن بدنسازی" },
+    { type: "AMENITY", label: "اسپا و ماساژ" },
+    { type: "AMENITY", label: "رستوران" },
+    { type: "AMENITY", label: "کافی‌شاپ" },
+    { type: "AMENITY", label: "پارکینگ" },
+    { type: "AMENITY", label: "خدمات ۲۴ ساعته" },
+    { type: "AMENITY", label: "اتاق خانوادگی" },
+    { type: "AMENITY", label: "تهویه مطبوع" },
+    { type: "AMENITY", label: "بالکن" },
+    // Cancellation templates
+    { type: "CANCELLATION", label: "کنسلی تا ۴۸ ساعت پیش از پرواز: ۱۰٪ جریمه", value: "کنسلی تا ۴۸ ساعت پیش از پرواز مشمول ۱۰٪ جریمه است." },
+    { type: "CANCELLATION", label: "کنسلی تا ۲۴ ساعت پیش از پرواز: ۳۰٪ جریمه", value: "کنسلی تا ۲۴ ساعت پیش از پرواز مشمول ۳۰٪ جریمه است." },
+    { type: "CANCELLATION", label: "کنسلی پس از ۲۴ ساعت: ۵۰٪ جریمه", value: "کنسلی پس از ۲۴ ساعت پیش از پرواز مشمول ۵۰٪ جریمه است." },
+    { type: "CANCELLATION", label: "کنسلی غیرقابل استرداد", value: "این تور غیرقابل کنسلی و استرداد وجه است." },
+  ];
+
+  for (let i = 0; i < templateData.length; i++) {
+    const t = templateData[i];
+    await prisma.serviceTemplate.upsert({
+      where: { id: `template-${t.type.toLowerCase()}-${i}` },
+      update: {},
+      create: {
+        type: t.type,
+        label: t.label,
+        value: t.value ?? null,
+        order: i,
+        isActive: true,
+      },
+    });
+  }
+  console.log("✅ Service templates created");
+
   console.log("🎉 Seeding completed!");
 }
 
