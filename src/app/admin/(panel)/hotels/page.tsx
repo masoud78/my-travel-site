@@ -165,7 +165,7 @@ export default function AdminHotelsPage() {
         title: "ستاره",
         render: (row: Hotel) => (
           <div className="flex items-center gap-1 text-amber-500">
-            <span className="num-en font-medium">{row.stars}</span>
+            <span className="font-medium">{formatNumber(row.stars)}</span>
             <Star className="w-4 h-4 fill-current" />
           </div>
         ),
@@ -299,12 +299,11 @@ export default function AdminHotelsPage() {
           </div>
 
           <div className="space-y-2 md:col-span-2">
-            <Label>توضیحات</Label>
-            <Textarea
+            <RichTextEditor
+              label="توضیحات"
               value={form.description}
-              onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
+              onChange={(v) => setForm((f) => ({ ...f, description: v }))}
               placeholder="توضیحات هتل، موقعیت، خدمات..."
-              rows={4}
             />
           </div>
 
@@ -320,12 +319,13 @@ export default function AdminHotelsPage() {
           </div>
 
           <div className="space-y-2 md:col-span-2">
-            <Label>امکانات (هر خط یکی)</Label>
-            <Textarea
+            <TemplateSelector
+              type="AMENITY"
+              label="امکانات"
+              templates={serviceTemplates}
               value={form.amenities}
-              onChange={(e) => setForm((f) => ({ ...f, amenities: e.target.value }))}
-              placeholder="Wi-Fi رایگان&#10;استخر&#10;صبحانه"
-              rows={3}
+              onChange={(v) => setForm((f) => ({ ...f, amenities: v }))}
+              placeholder="Wi-Fi رایگان"
             />
           </div>
         </div>
