@@ -74,7 +74,7 @@ export default async function DestinationPage({ params }: DestinationPageProps) 
   return (
     <div className="min-h-screen flex flex-col">
       <main className="flex-1">
-        <section className="relative h-64 md:h-80 overflow-hidden">
+        <section className="relative h-52 sm:h-64 md:h-80 overflow-hidden">
           <Image
             src={destination.image || "/images/destinations/destinations-hero.jpg"}
             alt={destination.name}

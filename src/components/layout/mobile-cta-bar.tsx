@@ -18,21 +18,21 @@ export function MobileCTABar({
     <>
       {/* Sticky bottom CTA — mobile only */}
       <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-stone-200 shadow-[0_-4px_12px_rgba(0,0,0,0.08)] safe-area-inset-bottom">
-        <div className="grid grid-cols-2 gap-2 p-3">
+        <div className="grid grid-cols-2 gap-2 p-2 sm:p-3">
           <a
             href={`tel:${phoneNumber}`}
-            className="flex items-center justify-center gap-2 py-3 rounded-xl bg-secondary text-white font-bold text-sm shadow-sm hover:bg-secondary-600 transition-colors"
+            className="flex items-center justify-center gap-1.5 sm:gap-2 py-2.5 sm:py-3 rounded-xl bg-secondary text-white font-bold text-xs sm:text-sm shadow-sm hover:bg-secondary-600 transition-colors"
           >
-            <Phone className="w-5 h-5" />
+            <Phone className="w-4 h-4 sm:w-5 sm:h-5" />
             <span>تماس فوری</span>
           </a>
           <a
             href={whatsapp}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 py-3 rounded-xl bg-[#25D366] text-white font-bold text-sm shadow-sm hover:opacity-90 transition-opacity"
+            className="flex items-center justify-center gap-1.5 sm:gap-2 py-2.5 sm:py-3 rounded-xl bg-[#25D366] text-white font-bold text-xs sm:text-sm shadow-sm hover:opacity-90 transition-opacity"
           >
-            <MessageCircle className="w-5 h-5" />
+            <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5" />
             <span>واتساپ</span>
           </a>
         </div>

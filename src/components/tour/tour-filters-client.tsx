@@ -71,14 +71,14 @@ function TourFiltersSkeleton({ title, subtitle }: TourFiltersClientProps) {
       <div className="bg-white rounded-2xl border border-stone-200 p-4 mb-6 shadow-sm">
         <div className="flex flex-col md:flex-row gap-3">
           <div className="h-10 bg-stone-100 rounded-lg flex-1" />
-          <div className="flex gap-2">
-            <div className="h-10 w-28 bg-stone-100 rounded-lg" />
-            <div className="h-10 w-24 bg-stone-100 rounded-lg" />
+          <div className="flex flex-col sm:flex-row gap-2">
+            <div className="h-10 w-full sm:w-28 bg-stone-100 rounded-lg" />
+            <div className="h-10 w-full sm:w-24 bg-stone-100 rounded-lg" />
           </div>
         </div>
       </div>
       <SectionHeading title={title ?? "تورهای ریوان سفر"} subtitle={subtitle} className="mb-6" />
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         {Array.from({ length: 6 }).map((_, i) => (
           <div key={i} className="h-80 bg-stone-100 rounded-2xl" />
         ))}
@@ -223,11 +223,11 @@ function TourFiltersInner({
               className="pr-10"
             />
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-col sm:flex-row gap-2">
             <Button
               type="button"
               variant="outline"
-              className="gap-2"
+              className="gap-2 justify-center w-full sm:w-auto"
               onClick={() => setShowFilters((s) => !s)}
             >
               <SlidersHorizontal className="w-4 h-4" />
@@ -240,7 +240,7 @@ function TourFiltersInner({
                 </span>
               )}
             </Button>
-            <Button type="button" onClick={applyFilters}>
+            <Button type="button" onClick={applyFilters} className="w-full sm:w-auto">
               جستجو
             </Button>
           </div>
@@ -291,7 +291,7 @@ function TourFiltersInner({
             </div>
             <div>
               <Label className="mb-1.5 block text-sm">محدوده قیمت (تومان)</Label>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                 <Input
                   type="number"
                   min={0}
@@ -299,7 +299,7 @@ function TourFiltersInner({
                   value={minPrice}
                   onChange={(e) => setMinPrice(e.target.value)}
                 />
-                <span className="text-stone-400">-</span>
+                <span className="text-stone-400 text-center hidden sm:inline">-</span>
                 <Input
                   type="number"
                   min={0}
@@ -316,7 +316,7 @@ function TourFiltersInner({
             </div>
             <div>
               <Label className="mb-1.5 block text-sm">مدت اقامت (شب)</Label>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                 <Input
                   type="number"
                   min={0}
@@ -324,7 +324,7 @@ function TourFiltersInner({
                   value={minDuration}
                   onChange={(e) => setMinDuration(e.target.value)}
                 />
-                <span className="text-stone-400">-</span>
+                <span className="text-stone-400 text-center hidden sm:inline">-</span>
                 <Input
                   type="number"
                   min={0}
@@ -334,7 +334,7 @@ function TourFiltersInner({
                 />
               </div>
             </div>
-            <div className="flex items-end gap-2 sm:col-span-2 lg:col-span-3">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-end gap-2 sm:col-span-2 lg:col-span-3">
               <Button type="button" variant="outline" onClick={clearFilters} className="gap-2">
                 <X className="w-4 h-4" />
                 پاک کردن
@@ -350,10 +350,10 @@ function TourFiltersInner({
       {/* Results header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <SectionHeading title={title} subtitle={subtitle} className="mb-0" />
-        <div className="flex items-center gap-3">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3">
           <span className="text-sm text-stone-500">{filtered.length} تور یافت شد</span>
           <Select value={sort} onValueChange={setSort}>
-            <SelectTrigger className="w-40">
+            <SelectTrigger className="w-full sm:w-40">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -369,7 +369,7 @@ function TourFiltersInner({
 
       {/* Grid */}
       {filtered.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {filtered.map((tour) => (
             <TourCard key={tour.id} tour={tour} />
           ))}
@@ -377,8 +377,8 @@ function TourFiltersInner({
       ) : (
         <div className="text-center py-16 bg-white rounded-2xl border border-stone-200">
           <Search className="w-12 h-12 text-stone-300 mx-auto mb-4" />
-          <h3 className="text-xl font-bold text-stone-900 mb-2">توری یافت نشد</h3>
-          <p className="text-stone-600 mb-4">با فیلترهای انتخابی توری یافت نشد. فیلترها را کمتر کنید یا جستجو را تغییر دهید.</p>
+          <h3 className="text-lg sm:text-xl font-bold text-stone-900 mb-2">توری یافت نشد</h3>
+          <p className="text-stone-600 mb-4 text-sm sm:text-base">با فیلترهای انتخابی توری یافت نشد. فیلترها را کمتر کنید یا جستجو را تغییر دهید.</p>
           <Button type="button" onClick={clearFilters} variant="outline">
             پاک کردن فیلترها
           </Button>

@@ -66,7 +66,7 @@ export function TourCard({ tour }: TourCardProps) {
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           className="object-cover group-hover:scale-105 transition-transform duration-500"
         />
-        <div className="absolute top-3 right-3 flex flex-col gap-1.5 items-end">
+        <div className="absolute top-2 sm:top-3 right-2 sm:right-3 flex flex-col gap-1 sm:gap-1.5 items-end">
           {tour.isFeatured && (
             <Badge variant="accent" className="shadow-md">
               <Star className="w-3 h-3 ml-1" />
@@ -85,19 +85,19 @@ export function TourCard({ tour }: TourCardProps) {
             </div>
           ) : null}
         </div>
-        <div className="absolute top-3 left-3 bg-white/95 backdrop-blur-sm text-stone-700 text-xs font-medium px-2 py-1 rounded-md flex items-center gap-1">
+        <div className="absolute top-2 sm:top-3 left-2 sm:left-3 bg-white/95 backdrop-blur-sm text-stone-700 text-xs font-medium px-2 py-1 rounded-md flex items-center gap-1">
           <MapPin className="w-3 h-3" />
-          {tour.destination}
+          <span className="truncate max-w-[7rem] sm:max-w-[9rem]">{tour.destination}</span>
         </div>
       </div>
 
       {/* Body */}
       <div className="flex-1 flex flex-col p-3 gap-2">
-        <h3 className="font-bold text-sm text-stone-900 line-clamp-2 group-hover:text-primary transition-colors min-h-[2.75rem]">
+        <h3 className="font-bold text-sm text-stone-900 line-clamp-2 group-hover:text-primary transition-colors min-h-[2.5rem] sm:min-h-[2.75rem]">
           {tour.title}
         </h3>
 
-        <div className="flex flex-wrap items-center gap-2 text-[11px] text-stone-500">
+        <div className="flex flex-wrap items-center gap-2 text-[11px] sm:text-xs text-stone-500">
           <span className="flex items-center gap-1">
             <Clock className="w-3 h-3" />
             {formatNumber(tour.duration)} شب
@@ -129,14 +129,14 @@ export function TourCard({ tour }: TourCardProps) {
           </div>
         )}
 
-        <div className="mt-auto pt-2 border-t border-stone-100 flex items-end justify-between">
+        <div className="mt-auto pt-2 border-t border-stone-100 flex items-end justify-between gap-2">
           <div>
-            <div className="text-[10px] text-stone-400">شروع قیمت</div>
-            <div className="font-bold text-primary text-base">
+            <div className="text-[10px] sm:text-xs text-stone-400">شروع قیمت</div>
+            <div className="font-bold text-primary text-sm sm:text-base">
               {formatPrice(tour.price)}
             </div>
           </div>
-          <div className="text-[11px] font-semibold text-secondary bg-secondary-50 px-2.5 py-1 rounded-lg">
+          <div className="text-[11px] sm:text-xs font-semibold text-secondary bg-secondary-50 px-2.5 py-1 rounded-lg shrink-0">
             مشاهده تور
           </div>
         </div>

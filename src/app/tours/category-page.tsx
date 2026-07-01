@@ -89,7 +89,7 @@ export async function CategoryToursPage({ slug }: CategoryToursPageProps) {
     <div className="min-h-screen flex flex-col">
       <main className="flex-1">
         {/* Hero */}
-        <section className="relative h-56 md:h-72 overflow-hidden">
+        <section className="relative h-52 sm:h-56 md:h-72 overflow-hidden">
           <Image
             src={categoryHeroImages[cat.slug] || "/images/hero/hero-tours.jpg"}
             alt={cat.title}
@@ -101,8 +101,8 @@ export async function CategoryToursPage({ slug }: CategoryToursPageProps) {
           <div className="absolute inset-0 bg-gradient-to-r from-stone-900/80 to-stone-900/40" />
           <div className="container mx-auto px-4 h-full flex items-center relative z-10">
             <div className="max-w-2xl text-white">
-              <h1 className="text-3xl md:text-4xl font-bold mb-3">{cat.title}</h1>
-              <p className="text-lg text-stone-100">{cat.subtitle}</p>
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3">{cat.title}</h1>
+              <p className="text-base sm:text-lg text-stone-100">{cat.subtitle}</p>
             </div>
           </div>
         </section>

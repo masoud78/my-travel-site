@@ -42,15 +42,15 @@ export function Header({
       )}
     >
       {/* Announcement bar */}
-      <div className="bg-primary text-white text-center text-xs sm:text-sm py-1.5 px-4">
+      <div className="bg-primary text-white text-center text-xs sm:text-sm py-1.5 px-3 sm:px-4">
         <span className="hidden sm:inline">تورهای نوروز ۱۴۰۵ رزرو شد — </span>
         <Link href="/tours/special" className="underline font-semibold hover:opacity-90">
-          مشاهده پیشنهادهای ویژه
+          پیشنهادهای ویژه
         </Link>
       </div>
 
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16 lg:h-20 gap-4">
+      <div className="container mx-auto px-3 sm:px-4">
+        <div className="flex items-center justify-between h-14 sm:h-16 lg:h-20 gap-2 sm:gap-4">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 shrink-0" aria-label={siteTitle}>
             {logoSrc ? (
@@ -110,7 +110,7 @@ export function Header({
           </nav>
 
           {/* Right actions */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2">
             <Link
               href="/search"
               className="p-2 rounded-lg text-stone-600 hover:text-primary hover:bg-stone-50 transition-colors"
@@ -147,8 +147,8 @@ export function Header({
 
       {/* Mobile menu */}
       {open && (
-        <div className="lg:hidden border-t border-stone-200 bg-white">
-          <nav className="container mx-auto px-4 py-4 flex flex-col gap-1" aria-label="منوی موبایل">
+        <div className="lg:hidden border-t border-stone-200 bg-white max-h-[calc(100vh-3.5rem)] overflow-y-auto">
+          <nav className="container mx-auto px-3 sm:px-4 py-4 flex flex-col gap-1" aria-label="منوی موبایل">
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.key}

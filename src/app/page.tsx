@@ -110,7 +110,7 @@ async function HomeBlockRenderer({ block }: { block: { id: string; title: string
           </Link>
         }
       />
-      <div className={`grid ${gridClass} gap-6`}>
+      <div className={`grid ${gridClass} gap-4 sm:gap-6`}>
         {tours.map((tour) => (
           <TourCard
             key={tour.id}
@@ -148,28 +148,28 @@ function HeroSection() {
         <div className="absolute inset-0 bg-gradient-to-r from-stone-900/80 via-stone-900/50 to-transparent" />
       </div>
 
-      <div className="container mx-auto px-4 py-16 md:py-28 relative z-10">
-        <div className="max-w-2xl">
-          <Badge variant="accent" className="mb-4 text-sm gap-1">
-            <Sparkles className="w-3.5 h-3.5" />
+      <div className="container mx-auto px-3 sm:px-4 py-14 sm:py-20 md:py-28 relative z-10">
+        <div className="max-w-xl sm:max-w-2xl">
+          <Badge variant="accent" className="mb-3 md:mb-4 text-xs sm:text-sm gap-1">
+            <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
             ویژه نوروز ۱۴۰۵
           </Badge>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6 drop-shadow-sm">
+          <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4 md:mb-6 drop-shadow-sm">
             سفری <span className="text-accent-300">روان</span> با{" "}
             <span className="text-white">ریوان سفر</span>
           </h1>
-          <p className="text-lg md:text-xl text-stone-100 leading-relaxed mb-8 drop-shadow-sm">
+          <p className="text-base sm:text-lg md:text-xl text-stone-100 leading-relaxed mb-6 md:mb-8 drop-shadow-sm">
             تورهای داخلی و خارجی با بهترین قیمت، مشاوره‌ی تخصصی رایگان و پشتیبانی ۲۴ ساعته.
             سفر بعدی‌تان را با ما بسازید.
           </p>
           <div className="flex flex-col sm:flex-row gap-3">
-            <Button asChild size="lg" variant="cta" className="shadow-lg">
+            <Button asChild size="lg" variant="cta" className="w-full sm:w-auto shadow-lg h-12 px-6 text-base">
               <Link href="/tours">
                 <Search className="w-5 h-5" />
                 مشاهده تمام تورها
               </Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="bg-white/10 text-white border-white/30 hover:bg-white/20 hover:text-white">
+            <Button asChild size="lg" variant="outline" className="w-full sm:w-auto bg-white/10 text-white border-white/30 hover:bg-white/20 hover:text-white h-12 px-6 text-base">
               <Link href="/contact">تماس با مشاور</Link>
             </Button>
           </div>
@@ -201,7 +201,7 @@ async function FeaturedToursSection() {
           </Link>
         }
       />
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         {tours.map((tour) => (
           <TourCard
             key={tour.id}
@@ -227,7 +227,7 @@ function TourSectionSkeleton() {
   return (
     <Section>
       <SectionHeading title="تورهای محبوب" />
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         {[1, 2, 3, 4, 5, 6].map((i) => (
           <TourCardSkeleton key={i} />
         ))}
@@ -246,15 +246,15 @@ function StatsSection() {
 
   return (
     <Section className="bg-primary text-white">
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8 text-center">
         {stats.map((stat, idx) => (
-          <div key={idx} className="flex flex-col items-center gap-3">
-            <div className="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-sm flex items-center justify-center">
-              <stat.icon className="w-8 h-8" />
+          <div key={idx} className="flex flex-col items-center gap-2 sm:gap-3">
+            <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-white/10 backdrop-blur-sm flex items-center justify-center">
+              <stat.icon className="w-6 h-6 sm:w-8 sm:h-8" />
             </div>
             <div>
-              <div className="text-3xl md:text-4xl font-bold mb-1">{stat.value}</div>
-              <div className="text-sm text-primary-100">{stat.label}</div>
+              <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1">{stat.value}</div>
+              <div className="text-xs sm:text-sm text-primary-100">{stat.label}</div>
             </div>
           </div>
         ))}
@@ -294,13 +294,13 @@ function WhyUsSection() {
   return (
     <Section className="bg-stone-50">
       <SectionHeading title="چرا ریوان سفر؟" subtitle="چهار دلیل برای اطمینان به ما" align="center" />
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         {features.map((f, idx) => (
-          <div key={idx} className="group bg-white rounded-2xl p-6 text-center hover:shadow-xl transition-shadow border border-stone-100">
-            <div className={`w-16 h-16 mx-auto mb-4 rounded-2xl ${f.color} flex items-center justify-center shadow-sm`}>
-              <f.icon className="w-8 h-8" />
+          <div key={idx} className="group bg-white rounded-2xl p-4 sm:p-6 text-center hover:shadow-xl transition-shadow border border-stone-100">
+            <div className={`w-14 h-14 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 rounded-2xl ${f.color} flex items-center justify-center shadow-sm`}>
+              <f.icon className="w-7 h-7 sm:w-8 sm:h-8" />
             </div>
-            <h3 className="font-bold text-lg text-stone-900 mb-2">{f.title}</h3>
+            <h3 className="font-bold text-base sm:text-lg text-stone-900 mb-2">{f.title}</h3>
             <p className="text-sm text-stone-600 leading-relaxed">{f.description}</p>
           </div>
         ))}
@@ -330,18 +330,18 @@ async function ReviewsSection() {
           </Link>
         }
       />
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
         {reviews.map((r) => (
-          <div key={r.id} className="bg-white rounded-2xl border border-stone-200 p-6 hover:shadow-md transition-shadow">
+          <div key={r.id} className="bg-white rounded-2xl border border-stone-200 p-4 sm:p-6 hover:shadow-md transition-shadow">
             <div className="flex items-center gap-1 mb-3 text-amber-400">
               {Array.from({ length: r.rating }).map((_, i) => (
                 <Star key={i} className="w-4 h-4 fill-current" />
               ))}
             </div>
-            {r.title && <h3 className="font-bold text-stone-900 mb-2">{r.title}</h3>}
+            {r.title && <h3 className="font-bold text-stone-900 mb-2 text-sm sm:text-base">{r.title}</h3>}
             <p className="text-sm text-stone-600 leading-relaxed mb-4 line-clamp-4">{r.content}</p>
             <div className="flex items-center gap-3 pt-3 border-t border-stone-100">
-              <div className="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center text-primary font-bold">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-primary-100 flex items-center justify-center text-primary font-bold text-sm sm:text-base">
                 {r.authorName.charAt(0)}
               </div>
               <div>
@@ -359,26 +359,26 @@ async function ReviewsSection() {
 function CTASection() {
   return (
     <Section className="bg-gradient-to-br from-secondary-50 to-accent-50">
-      <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-8 items-center">
+      <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-6 md:gap-8 items-center">
         <div>
-          <h2 className="text-3xl font-bold text-stone-900 mb-4">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-stone-900 mb-3 md:mb-4">
             سفر رویایی‌تان را با ما بسازید
           </h2>
-          <p className="text-stone-600 leading-relaxed mb-6">
+          <p className="text-sm sm:text-base text-stone-600 leading-relaxed mb-4 md:mb-6">
             تیم مشاوران ما آماده‌اند تا با توجه به بودجه و علاقه‌ی شما، بهترین تور را پیشنهاد دهند. کافیست فرم زیر را پر کنید.
           </p>
           <ul className="space-y-2 text-sm text-stone-700">
             <li className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-accent" />
-              مشاوره رایگان با کارشناسان مجرب
+              <CheckCircle2 className="w-4 h-4 text-accent shrink-0" />
+              <span>مشاوره رایگان با کارشناسان مجرب</span>
             </li>
             <li className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-accent" />
-              پاسخگویی سریع در کمتر از ۳۰ دقیقه
+              <CheckCircle2 className="w-4 h-4 text-accent shrink-0" />
+              <span>پاسخگویی سریع در کمتر از ۳۰ دقیقه</span>
             </li>
             <li className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-accent" />
-              تضمین بهترین قیمت بازار
+              <CheckCircle2 className="w-4 h-4 text-accent shrink-0" />
+              <span>تضمین بهترین قیمت بازار</span>
             </li>
           </ul>
         </div>

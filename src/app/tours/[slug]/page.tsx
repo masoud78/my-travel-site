@@ -241,12 +241,12 @@ export default async function TourDetailPage({ params }: TourDetailPageProps) {
           />
 
           {/* Header */}
-          <div className="flex flex-wrap items-start gap-3 mb-6">
-            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-stone-900 leading-tight">
+          <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-start gap-3 mb-6">
+            <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-stone-900 leading-tight flex-1">
               {tour.title}
             </h1>
             {statusConfig[tour.status] && (
-              <Badge variant={statusConfig[tour.status].variant} className="mt-1.5">
+              <Badge variant={statusConfig[tour.status].variant} className="self-start sm:mt-1.5">
                 {statusConfig[tour.status].label}
               </Badge>
             )}
@@ -254,20 +254,20 @@ export default async function TourDetailPage({ params }: TourDetailPageProps) {
 
           {/* Share + rating row */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-            <div className="flex items-center gap-3 text-sm text-stone-500">
-              <span className="flex items-center gap-1">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm text-stone-500">
+              <span className="inline-flex items-center gap-1">
                 {transportIcons[tour.transportType] || <Plane className="w-4 h-4" />}
                 {transportLabels[tour.transportType] || tour.transportType}
               </span>
-              <span className="w-px h-4 bg-stone-300" />
-              <span className="flex items-center gap-1">
+              <span className="hidden sm:block w-px h-4 bg-stone-300" />
+              <span className="inline-flex items-center gap-1">
                 <MapPin className="w-4 h-4" />
                 {tour.destination?.name || "نامشخص"}
               </span>
               {avgRating && (
                 <>
-                  <span className="w-px h-4 bg-stone-300" />
-                  <span className="flex items-center gap-1 text-amber-500">
+                  <span className="hidden sm:block w-px h-4 bg-stone-300" />
+                  <span className="inline-flex items-center gap-1 text-amber-500">
                     <Star className="w-4 h-4 fill-current" />
                     {avgRating} ({tour.reviews.length} نظر)
                   </span>
@@ -326,9 +326,11 @@ export default async function TourDetailPage({ params }: TourDetailPageProps) {
 
               {/* Dates table */}
               {tour.tourDates.length > 0 && (
-                <div className="bg-white rounded-2xl border border-stone-200 p-6 md:p-8">
+                <div className="bg-white rounded-2xl border border-stone-200 p-4 sm:p-6 md:p-8">
                   <SectionHeading title="تاریخ‌های حرکت" className="mb-4" />
-                  <div className="overflow-x-auto">
+
+                  {/* Desktop table */}
+                  <div className="hidden sm:block overflow-x-auto">
                     <table className="w-full text-sm">
                       <thead>
                         <tr className="border-b border-stone-200 text-stone-500">
@@ -375,14 +377,64 @@ export default async function TourDetailPage({ params }: TourDetailPageProps) {
                       </tbody>
                     </table>
                   </div>
+
+                  {/* Mobile cards */}
+                  <div className="sm:hidden space-y-3">
+                    {tour.tourDates.map((date) => (
+                      <div
+                        key={date.id}
+                        className="rounded-xl border border-stone-100 bg-stone-50 p-4 space-y-3"
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs text-stone-500">تاریخ رفت</span>
+                          <span className="text-sm font-medium">{formatJalaliDate(date.departDate)}</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs text-stone-500">تاریخ برگشت</span>
+                          <span className="text-sm font-medium">{formatJalaliDate(date.returnDate)}</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs text-stone-500">قیمت</span>
+                          <span className="text-sm font-bold text-primary">{formatPrice(date.price)}</span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs text-stone-500">ظرفیت</span>
+                          <span className="inline-flex items-center gap-1 text-sm">
+                            <Users className="w-4 h-4 text-stone-400" />
+                            {formatNumber(date.remaining)} / {formatNumber(date.capacity)}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between pt-2 border-t border-stone-100">
+                          <span className="text-xs text-stone-500">وضعیت</span>
+                          <Badge
+                            variant={
+                              date.status === "AVAILABLE"
+                                ? "success"
+                                : date.status === "FULL"
+                                ? "destructive"
+                                : "warning"
+                            }
+                          >
+                            {date.status === "AVAILABLE"
+                              ? "قابل رزرو"
+                              : date.status === "FULL"
+                              ? "تکمیل ظرفیت"
+                              : "لغو شده"}
+                          </Badge>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
 
               {/* Hotels table */}
               {tour.tourHotels.length > 0 && (
-                <div className="bg-white rounded-2xl border border-stone-200 p-6 md:p-8">
+                <div className="bg-white rounded-2xl border border-stone-200 p-4 sm:p-6 md:p-8">
                   <SectionHeading title="هتل‌ها و قیمت‌ها" className="mb-4" />
-                  <div className="overflow-x-auto">
+
+                  {/* Desktop table */}
+                  <div className="hidden sm:block overflow-x-auto">
                     <table className="w-full text-sm">
                       <thead>
                         <tr className="border-b border-stone-200 text-stone-500">
@@ -417,6 +469,39 @@ export default async function TourDetailPage({ params }: TourDetailPageProps) {
                         ))}
                       </tbody>
                     </table>
+                  </div>
+
+                  {/* Mobile cards */}
+                  <div className="sm:hidden space-y-3">
+                    {tour.tourHotels.map((th) => (
+                      <div
+                        key={th.id}
+                        className="rounded-xl border border-stone-100 bg-stone-50 p-4 space-y-2"
+                      >
+                        <div className="flex items-center justify-between">
+                          <span className="font-bold text-stone-900">{th.hotel.name}</span>
+                          <span className="text-amber-500 text-sm">{"★".repeat(th.hotel.stars)}</span>
+                        </div>
+                        <div className="grid grid-cols-2 gap-2 text-xs">
+                          <div className="rounded-lg bg-white p-2 border border-stone-100">
+                            <span className="block text-stone-500 mb-1">دو تخته</span>
+                            <span className="font-bold text-primary">{formatPrice(th.priceDouble)}</span>
+                          </div>
+                          <div className="rounded-lg bg-white p-2 border border-stone-100">
+                            <span className="block text-stone-500 mb-1">یک نفر اضافه</span>
+                            <span className="font-medium text-stone-700">{th.priceExtra ? formatPrice(th.priceExtra) : "-"}</span>
+                          </div>
+                          <div className="rounded-lg bg-white p-2 border border-stone-100">
+                            <span className="block text-stone-500 mb-1">کودک</span>
+                            <span className="font-medium text-stone-700">{th.priceChild ? formatPrice(th.priceChild) : "-"}</span>
+                          </div>
+                          <div className="rounded-lg bg-white p-2 border border-stone-100">
+                            <span className="block text-stone-500 mb-1">نوزاد</span>
+                            <span className="font-medium text-stone-700">{th.priceInfant ? formatPrice(th.priceInfant) : "-"}</span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               )}

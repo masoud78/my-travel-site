@@ -58,25 +58,25 @@ export function CallbackForm({ tourTitle, subject, compact = false, className = 
   }
 
   return (
-    <form onSubmit={handleSubmit} className={`rounded-2xl bg-white border border-stone-200 p-5 md:p-6 ${className}`}>
-      <div className="flex items-center gap-2 mb-4">
-        <Phone className="w-5 h-5 text-secondary" />
-        <h3 className="font-bold text-lg text-stone-900">
+    <form onSubmit={handleSubmit} className={`rounded-2xl bg-white border border-stone-200 p-4 sm:p-5 md:p-6 ${className}`}>
+      <div className="flex items-center gap-2 mb-3 md:mb-4">
+        <Phone className="w-5 h-5 text-secondary shrink-0" />
+        <h3 className="font-bold text-base md:text-lg text-stone-900">
           {tourTitle ? "درخواست مشاوره" : "درخواست تماس متقابل"}
         </h3>
       </div>
       {!compact && (
-        <p className="text-sm text-stone-600 mb-4">
+        <p className="text-xs sm:text-sm text-stone-600 mb-3 md:mb-4">
           نام و شماره خود را وارد کنید. مشاور ما در سریع‌ترین زمان با شما تماس می‌گیرد.
         </p>
       )}
 
-      <div className="space-y-3">
+      <div className="space-y-2.5 md:space-y-3">
         <input
           name="name"
           required
           placeholder="نام و نام خانوادگی"
-          className="w-full px-4 py-3 rounded-lg border border-stone-200 focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none text-sm"
+          className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg border border-stone-200 focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none text-sm"
         />
         <input
           name="phone"
@@ -85,14 +85,14 @@ export function CallbackForm({ tourTitle, subject, compact = false, className = 
           pattern="^0?9[0-9]{9}$"
           placeholder="شماره موبایل (مثلاً 09121234567)"
           dir="ltr"
-          className="w-full px-4 py-3 rounded-lg border border-stone-200 focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none text-sm font-mono"
+          className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg border border-stone-200 focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none text-sm font-mono"
         />
         {!compact && (
           <textarea
             name="message"
             rows={3}
             placeholder="پیام شما (اختیاری)"
-            className="w-full px-4 py-3 rounded-lg border border-stone-200 focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none text-sm resize-none"
+            className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg border border-stone-200 focus:border-primary focus:ring-2 focus:ring-primary/20 focus:outline-none text-sm resize-none"
           />
         )}
       </div>
@@ -106,7 +106,7 @@ export function CallbackForm({ tourTitle, subject, compact = false, className = 
       <button
         type="submit"
         disabled={status === "loading"}
-        className="mt-4 w-full bg-secondary hover:bg-secondary-600 disabled:opacity-50 text-white font-bold py-3 rounded-lg transition-colors flex items-center justify-center gap-2"
+        className="mt-3 md:mt-4 w-full bg-secondary hover:bg-secondary-600 disabled:opacity-50 text-white font-bold py-2.5 sm:py-3 rounded-lg transition-colors flex items-center justify-center gap-2 text-sm sm:text-base"
       >
         {status === "loading" ? (
           "در حال ارسال..."

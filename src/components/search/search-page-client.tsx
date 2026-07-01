@@ -251,7 +251,7 @@ function SearchPageInner({ initialTours, transports }: SearchPageClientProps) {
 
             <div>
               <Label className="mb-1.5 block text-sm">محدوده قیمت (تومان)</Label>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                 <Input
                   type="number"
                   min={0}
@@ -259,7 +259,7 @@ function SearchPageInner({ initialTours, transports }: SearchPageClientProps) {
                   value={minPrice}
                   onChange={(e) => setMinPrice(e.target.value)}
                 />
-                <span className="text-stone-400">-</span>
+                <span className="text-stone-400 text-center hidden sm:inline">-</span>
                 <Input
                   type="number"
                   min={0}

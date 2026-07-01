@@ -10,8 +10,8 @@ interface SectionProps {
 
 export function Section({ children, className, containerClassName, id }: SectionProps) {
   return (
-    <section id={id} className={cn("py-12 md:py-16", className)}>
-      <div className={cn("container mx-auto px-4", containerClassName)}>{children}</div>
+    <section id={id} className={cn("py-10 md:py-14 lg:py-16", className)}>
+      <div className={cn("container mx-auto px-3 sm:px-4", containerClassName)}>{children}</div>
     </section>
   );
 }
@@ -28,15 +28,15 @@ export function SectionHeading({ title, subtitle, align = "right", action, class
   return (
     <div
       className={cn(
-        "mb-6 flex flex-col gap-1",
+        "mb-5 md:mb-6 flex flex-col gap-2 md:gap-1",
         align === "center" && "items-center text-center",
         action && "md:flex-row md:items-end md:justify-between",
         className
       )}
     >
       <div>
-        <h2 className="text-xl md:text-2xl font-bold text-stone-900 leading-tight">{title}</h2>
-        {subtitle && <p className="mt-2 text-stone-600 text-sm md:text-base">{subtitle}</p>}
+        <h2 className="text-lg md:text-xl lg:text-2xl font-bold text-stone-900 leading-tight">{title}</h2>
+        {subtitle && <p className="mt-1 md:mt-2 text-stone-600 text-sm md:text-base">{subtitle}</p>}
       </div>
       {action && <div className="shrink-0">{action}</div>}
     </div>

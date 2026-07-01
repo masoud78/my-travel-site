@@ -264,6 +264,22 @@ body {
   .container-fluid { padding-inline: 2rem; }
 }
 
+/* Mobile bottom safe-area padding utility for fixed bars */
+.safe-area-inset-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Ensure page content clears the mobile sticky bottom bar */
+body:has(.safe-area-inset-bottom) {
+  padding-bottom: 4.5rem;
+}
+
+@media (min-width: 1024px) {
+  body:has(.safe-area-inset-bottom) {
+    padding-bottom: 0;
+  }
+}
+
 /* Hide scrollbar but keep functionality */
 .no-scrollbar {
   scrollbar-width: none;

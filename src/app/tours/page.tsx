@@ -65,7 +65,7 @@ export default async function ToursPage() {
     <div className="min-h-screen flex flex-col">
       <main className="flex-1">
         {/* Hero */}
-        <section className="relative h-64 md:h-80 overflow-hidden">
+        <section className="relative h-52 sm:h-64 md:h-80 overflow-hidden">
           <Image
             src="/images/hero/hero-tours.jpg"
             alt="تورهای مسافرتی"
@@ -77,8 +77,8 @@ export default async function ToursPage() {
           <div className="absolute inset-0 bg-gradient-to-r from-stone-900/80 to-stone-900/40" />
           <div className="container mx-auto px-4 h-full flex items-center relative z-10">
             <div className="max-w-2xl text-white">
-              <h1 className="text-3xl md:text-4xl font-bold mb-3">تورهای مسافرتی</h1>
-              <p className="text-lg text-stone-100">تورهای داخلی و خارجی با بهترین قیمت</p>
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3">تورهای مسافرتی</h1>
+              <p className="text-base sm:text-lg text-stone-100">تورهای داخلی و خارجی با بهترین قیمت</p>
             </div>
           </div>
         </section>

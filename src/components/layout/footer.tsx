@@ -21,13 +21,13 @@ export function Footer({
   siteSubtitle = SITE_CONFIG.tagline,
 }: FooterProps) {
   return (
-    <footer className="bg-stone-900 text-stone-200 mt-20">
+    <footer className="bg-stone-900 text-stone-200 mt-12 md:mt-20">
       {/* Newsletter strip */}
       <div className="bg-primary-900 border-b border-primary-800">
-        <div className="container mx-auto px-4 py-8 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="container mx-auto px-3 sm:px-4 py-6 sm:py-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="text-center md:text-right">
-            <div className="text-lg font-bold text-white">از تورهای جدید زودتر باخبر شوید</div>
-            <div className="text-sm text-primary-100 mt-1">
+            <div className="text-base sm:text-lg font-bold text-white">از تورهای جدید زودتر باخبر شوید</div>
+            <div className="text-xs sm:text-sm text-primary-100 mt-1">
               ایمیل خود را وارد کنید و پیشنهادهای ویژه‌ی ماهانه را دریافت کنید
             </div>
           </div>
@@ -36,12 +36,12 @@ export function Footer({
               type="email"
               required
               placeholder="ایمیل شما"
-              className="flex-1 md:w-64 px-4 py-3 rounded-lg bg-white text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-secondary"
+              className="flex-1 md:w-64 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg bg-white text-stone-900 placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-secondary text-sm"
               aria-label="ایمیل"
             />
             <button
               type="submit"
-              className="px-6 py-3 rounded-lg bg-secondary hover:bg-secondary-600 text-white font-semibold transition-colors whitespace-nowrap"
+              className="px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg bg-secondary hover:bg-secondary-600 text-white font-semibold transition-colors whitespace-nowrap text-sm sm:text-base"
             >
               عضویت
             </button>
@@ -50,10 +50,10 @@ export function Footer({
       </div>
 
       {/* Main footer */}
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
+      <div className="container mx-auto px-3 sm:px-4 py-8 sm:py-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 sm:gap-8">
           {/* Brand */}
-          <div className="col-span-2 md:col-span-3 lg:col-span-1">
+          <div className="col-span-1 sm:col-span-2 md:col-span-3 lg:col-span-1">
             <div className="flex items-center gap-2 mb-4">
               {logoSrc ? (
                 <div className="relative w-10 h-10 shrink-0">
@@ -125,7 +125,7 @@ export function Footer({
 
       {/* Bottom bar */}
       <div className="border-t border-stone-800">
-        <div className="container mx-auto px-4 py-4 flex flex-col md:flex-row items-center justify-between gap-2 text-xs text-stone-500">
+        <div className="container mx-auto px-3 sm:px-4 py-3 sm:py-4 flex flex-col md:flex-row items-center justify-between gap-2 text-xs text-stone-500">
           <div>
             © {new Date().getFullYear()} ریوان سفر — تمامی حقوق محفوظ است.
           </div>
