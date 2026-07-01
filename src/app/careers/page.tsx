@@ -1,6 +1,4 @@
 import { Metadata } from "next";
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
 import { MobileCTABar } from "@/components/layout/mobile-cta-bar";
 import { Section, SectionHeading } from "@/components/common/section";
 import { Breadcrumb } from "@/components/common/breadcrumb";
@@ -29,7 +27,6 @@ export default async function CareersPage() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
       <main className="flex-1">
         <Section className="bg-stone-50">
           <Breadcrumb items={[{ label: "فرصت‌های شغلی" }]} className="mb-4" />
@@ -86,7 +83,6 @@ export default async function CareersPage() {
           )}
         </Section>
       </main>
-      <Footer />
       <MobileCTABar />
     </div>
   );

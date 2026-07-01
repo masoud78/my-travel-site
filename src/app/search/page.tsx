@@ -1,6 +1,4 @@
 import { Metadata } from "next";
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
 import { MobileCTABar } from "@/components/layout/mobile-cta-bar";
 import { Breadcrumb } from "@/components/common/breadcrumb";
 import { SearchPageClient } from "@/components/search/search-page-client";
@@ -65,7 +63,6 @@ export default async function SearchPage() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
       <main className="flex-1">
         <Section className="bg-stone-50">
           <Breadcrumb items={[{ label: "جستجو" }]} className="mb-4" />
@@ -82,7 +79,6 @@ export default async function SearchPage() {
           </div>
         </Section>
       </main>
-      <Footer />
       <MobileCTABar />
     </div>
   );

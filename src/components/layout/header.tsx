@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState, useEffect } from "react";
 import { Menu, X, Phone, Search } from "lucide-react";
 import { NAV_LINKS, SITE_CONFIG } from "@/lib/site-config";
@@ -9,11 +10,17 @@ import { cn } from "@/lib/utils";
 interface HeaderProps {
   phoneNumber?: string;
   phoneDisplay?: string;
+  logoSrc?: string | null;
+  siteTitle?: string;
+  siteSubtitle?: string;
 }
 
 export function Header({
   phoneNumber = SITE_CONFIG.defaultPhone,
   phoneDisplay = SITE_CONFIG.defaultPhoneDisplay,
+  logoSrc,
+  siteTitle = SITE_CONFIG.name,
+  siteSubtitle = SITE_CONFIG.tagline,
 }: HeaderProps) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -45,16 +52,28 @@ export function Header({
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 lg:h-20 gap-4">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 shrink-0" aria-label="ریوان سفر">
-            <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-xl bg-gradient-to-br from-primary to-primary-700 flex items-center justify-center text-white font-bold text-lg shadow-md">
-              ر
-            </div>
+          <Link href="/" className="flex items-center gap-2 shrink-0" aria-label={siteTitle}>
+            {logoSrc ? (
+              <div className="relative w-10 h-10 lg:w-12 lg:h-12 shrink-0">
+                <Image
+                  src={logoSrc}
+                  alt={siteTitle}
+                  fill
+                  className="object-contain"
+                  sizes="48px"
+                />
+              </div>
+            ) : (
+              <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-xl bg-gradient-to-br from-primary to-primary-700 flex items-center justify-center text-white font-bold text-lg shadow-md">
+                ر
+              </div>
+            )}
             <div className="hidden sm:block">
               <div className="font-bold text-lg lg:text-xl text-stone-900 leading-tight">
-                ریوان سفر
+                {siteTitle}
               </div>
               <div className="text-xs text-stone-500 leading-tight">
-                همسفر روان شما
+                {siteSubtitle}
               </div>
             </div>
           </Link>

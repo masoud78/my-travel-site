@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Phone, Mail, MapPin, Instagram, Send, Shield, BadgeCheck } from "lucide-react";
 import { SITE_CONFIG, FOOTER_LINKS } from "@/lib/site-config";
 
@@ -6,12 +7,18 @@ interface FooterProps {
   phoneNumber?: string;
   phoneDisplay?: string;
   email?: string;
+  logoSrc?: string | null;
+  siteTitle?: string;
+  siteSubtitle?: string;
 }
 
 export function Footer({
   phoneNumber = SITE_CONFIG.defaultPhone,
   phoneDisplay = SITE_CONFIG.defaultPhoneDisplay,
   email = SITE_CONFIG.email,
+  logoSrc,
+  siteTitle = SITE_CONFIG.name,
+  siteSubtitle = SITE_CONFIG.tagline,
 }: FooterProps) {
   return (
     <footer className="bg-stone-900 text-stone-200 mt-20">
@@ -48,12 +55,18 @@ export function Footer({
           {/* Brand */}
           <div className="col-span-2 md:col-span-3 lg:col-span-1">
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center text-white font-bold">
-                ر
-              </div>
+              {logoSrc ? (
+                <div className="relative w-10 h-10 shrink-0">
+                  <Image src={logoSrc} alt={siteTitle} fill className="object-contain" sizes="40px" />
+                </div>
+              ) : (
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center text-white font-bold">
+                  ر
+                </div>
+              )}
               <div>
-                <div className="font-bold text-white">ریوان سفر</div>
-                <div className="text-xs text-stone-400">{SITE_CONFIG.tagline}</div>
+                <div className="font-bold text-white">{siteTitle}</div>
+                <div className="text-xs text-stone-400">{siteSubtitle}</div>
               </div>
             </div>
             <p className="text-sm text-stone-400 leading-relaxed mb-4">
@@ -80,7 +93,7 @@ export function Footer({
               <li>
                 <a href={`tel:${phoneNumber}`} className="flex items-start gap-2 text-stone-300 hover:text-secondary transition-colors">
                   <Phone className="w-4 h-4 mt-0.5 shrink-0" />
-                  <span className="font-mono" dir="ltr">{phoneDisplay}</span>
+                  <span className="tabular-nums tracking-wide" dir="ltr">{phoneDisplay}</span>
                 </a>
               </li>
               <li>

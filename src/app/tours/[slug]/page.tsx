@@ -1,8 +1,6 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
 import { MobileCTABar } from "@/components/layout/mobile-cta-bar";
 import { Section, SectionHeading } from "@/components/common/section";
 import { Breadcrumb } from "@/components/common/breadcrumb";
@@ -227,7 +225,6 @@ export default async function TourDetailPage({ params }: TourDetailPageProps) {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
       <main className="flex-1">
         <Section className="bg-stone-50 pb-6">
           <Breadcrumb
@@ -630,7 +627,6 @@ export default async function TourDetailPage({ params }: TourDetailPageProps) {
           </Section>
         )}
       </main>
-      <Footer />
       <MobileCTABar />
 
       <script

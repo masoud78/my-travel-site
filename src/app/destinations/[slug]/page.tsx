@@ -2,8 +2,6 @@ import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
 import { MobileCTABar } from "@/components/layout/mobile-cta-bar";
 import { Section, SectionHeading } from "@/components/common/section";
 import { Breadcrumb } from "@/components/common/breadcrumb";
@@ -75,7 +73,6 @@ export default async function DestinationPage({ params }: DestinationPageProps) 
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
       <main className="flex-1">
         <section className="relative h-64 md:h-80 overflow-hidden">
           <Image
@@ -198,7 +195,6 @@ export default async function DestinationPage({ params }: DestinationPageProps) 
           </div>
         </Section>
       </main>
-      <Footer />
       <MobileCTABar />
     </div>
   );

@@ -1,7 +1,5 @@
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
 import { MobileCTABar } from "@/components/layout/mobile-cta-bar";
 import { Section } from "@/components/common/section";
 import { Breadcrumb } from "@/components/common/breadcrumb";
@@ -89,7 +87,6 @@ export async function CategoryToursPage({ slug }: CategoryToursPageProps) {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
       <main className="flex-1">
         {/* Hero */}
         <section className="relative h-56 md:h-72 overflow-hidden">
@@ -129,7 +126,6 @@ export async function CategoryToursPage({ slug }: CategoryToursPageProps) {
           />
         </Section>
       </main>
-      <Footer />
       <MobileCTABar />
     </div>
   );

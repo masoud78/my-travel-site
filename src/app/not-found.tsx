@@ -1,6 +1,4 @@
 import Link from "next/link";
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
 import { MobileCTABar } from "@/components/layout/mobile-cta-bar";
 import { Section } from "@/components/common/section";
 import { Button } from "@/components/ui/button";
@@ -14,7 +12,6 @@ export const metadata = {
 export default function NotFoundPage() {
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
       <main className="flex-1">
         <Section className="flex items-center justify-center min-h-[60vh]">
           <div className="text-center max-w-xl mx-auto">
@@ -44,7 +41,6 @@ export default function NotFoundPage() {
           </div>
         </Section>
       </main>
-      <Footer />
       <MobileCTABar />
     </div>
   );

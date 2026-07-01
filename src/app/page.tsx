@@ -1,7 +1,5 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
 import { MobileCTABar } from "@/components/layout/mobile-cta-bar";
 import { Section, SectionHeading } from "@/components/common/section";
 import { TourCard } from "@/components/tour/tour-card";
@@ -12,15 +10,16 @@ import { Search, Users, Award, MapPin, TrendingUp, Star, Wallet, Headphones, Shi
 import { prisma } from "@/lib/prisma";
 import { Suspense } from "react";
 import { TourCardSkeleton } from "@/components/tour/tour-card";
+import { getActiveHomeBlocks } from "@/lib/admin-actions";
+import type { Tour, Destination } from "@prisma/client";
 
 export default async function HomePage() {
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
       <main className="flex-1">
         <HeroSection />
         <Suspense fallback={<TourSectionSkeleton />}>
-          <FeaturedToursSection />
+          <HomeBlocksSection />
         </Suspense>
         <StatsSection />
         <WhyUsSection />
@@ -29,9 +28,107 @@ export default async function HomePage() {
         </Suspense>
         <CTASection />
       </main>
-      <Footer />
       <MobileCTABar />
     </div>
+  );
+}
+
+async function HomeBlocksSection() {
+  const blocks = await getActiveHomeBlocks();
+  if (!blocks.length) {
+    return <FeaturedToursSection />;
+  }
+  return (
+    <>
+      {blocks.map((block) => (
+        <HomeBlockRenderer key={block.id} block={block} />
+      ))}
+    </>
+  );
+}
+
+async function HomeBlockRenderer({ block }: { block: { id: string; title: string; subtitle: string | null; layout: string; filterType: string; filterValue: string | null } }) {
+  let where: Record<string, unknown> = { status: "PUBLISHED" };
+
+  switch (block.filterType) {
+    case "FEATURED":
+      where = { ...where, isFeatured: true };
+      break;
+    case "LAST_MINUTE":
+      where = { ...where, isLastMinute: true };
+      break;
+    case "CATEGORY":
+      where = { ...where, category: block.filterValue || undefined };
+      break;
+    case "DESTINATION": {
+      const dest = block.filterValue
+        ? await prisma.destination.findUnique({ where: { slug: block.filterValue }, select: { id: true } })
+        : null;
+      if (dest) {
+        where = { ...where, destinationId: dest.id };
+      }
+      break;
+    }
+    case "CUSTOM": {
+      try {
+        const ids: string[] = JSON.parse(block.filterValue || "[]");
+        if (ids.length) {
+          where = { ...where, id: { in: ids } };
+        }
+      } catch {
+        // ignore invalid JSON
+      }
+      break;
+    }
+  }
+
+  const tours = await prisma.tour.findMany({
+    where,
+    orderBy: { createdAt: "desc" },
+    take: block.layout === "GRID_4" ? 8 : 6,
+    include: { destination: true },
+  });
+
+  if (!tours.length) return null;
+
+  const gridClass =
+    block.layout === "GRID_4"
+      ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
+      : block.layout === "LIST"
+      ? "grid-cols-1"
+      : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3";
+
+  return (
+    <Section>
+      <SectionHeading
+        title={block.title}
+        subtitle={block.subtitle || undefined}
+        action={
+          <Link href="/tours" className="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline">
+            مشاهده همه
+            <ArrowLeft className="w-4 h-4 scale-x-[-1]" />
+          </Link>
+        }
+      />
+      <div className={`grid ${gridClass} gap-6`}>
+        {tours.map((tour) => (
+          <TourCard
+            key={tour.id}
+            tour={{
+              id: tour.id,
+              slug: tour.slug,
+              title: tour.title,
+              destination: tour.destination?.name || tour.category,
+              duration: tour.nights,
+              transport: tour.transportType,
+              price: tour.startPrice,
+              image: tour.thumbnail || undefined,
+              hotelStars: 4,
+            }}
+          />
+        ))}
+      </div>
+    </Section>
   );
 }
 

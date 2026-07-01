@@ -1,7 +1,5 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
 import { MobileCTABar } from "@/components/layout/mobile-cta-bar";
 import { Section } from "@/components/common/section";
 import { Breadcrumb } from "@/components/common/breadcrumb";
@@ -40,7 +38,6 @@ export default async function CmsPage({ params }: CmsPageProps) {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
       <main className="flex-1">
         <Section className="bg-stone-50">
           <Breadcrumb items={[{ label: page.title }]} className="mb-4" />
@@ -64,7 +61,6 @@ export default async function CmsPage({ params }: CmsPageProps) {
           </div>
         </Section>
       </main>
-      <Footer />
       <MobileCTABar />
     </div>
   );

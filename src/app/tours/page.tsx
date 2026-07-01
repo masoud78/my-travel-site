@@ -1,7 +1,5 @@
 import { Metadata } from "next";
 import Image from "next/image";
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
 import { MobileCTABar } from "@/components/layout/mobile-cta-bar";
 import { Section } from "@/components/common/section";
 import { Breadcrumb } from "@/components/common/breadcrumb";
@@ -65,7 +63,6 @@ export default async function ToursPage() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Header />
       <main className="flex-1">
         {/* Hero */}
         <section className="relative h-64 md:h-80 overflow-hidden">
@@ -97,7 +94,6 @@ export default async function ToursPage() {
           />
         </Section>
       </main>
-      <Footer />
       <MobileCTABar />
     </div>
   );
