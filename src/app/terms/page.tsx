@@ -75,14 +75,14 @@ function TermSection({
   children: React.ReactNode;
 }) {
   return (
-    <div className="bg-white rounded-2xl border border-stone-200 p-6">
+    <div className="bg-white rounded-2xl border border-stone-200 p-4 sm:p-6">
       <div className="flex items-center gap-3 mb-3">
-        <div className="w-8 h-8 rounded-lg bg-primary-50 text-primary flex items-center justify-center font-bold text-sm">
+        <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-primary-50 text-primary flex items-center justify-center font-bold text-xs sm:text-sm">
           {number}
         </div>
-        <h2 className="font-bold text-lg text-stone-900">{title}</h2>
+        <h2 className="font-bold text-base sm:text-lg text-stone-900">{title}</h2>
       </div>
-      <p className="text-stone-600 leading-loose">{children}</p>
+      <p className="text-sm sm:text-base text-stone-600 leading-loose">{children}</p>
     </div>
   );
 }

@@ -67,7 +67,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 {post.category}
               </span>
             </div>
-            <h1 className="text-2xl md:text-4xl font-bold text-stone-900 mb-4 leading-tight">{post.title}</h1>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-stone-900 mb-4 leading-tight">{post.title}</h1>
             <div className="flex flex-wrap items-center gap-4 text-sm text-stone-500">
               {post.author?.name && (
                 <span className="inline-flex items-center gap-1">

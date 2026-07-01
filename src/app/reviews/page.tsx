@@ -31,7 +31,7 @@ export default async function ReviewsPage() {
               نظرات صادقانه‌ی مسافران ما را بخوانید و با خیال راحت سفر بعدی‌تان را انتخاب کنید.
             </p>
             {avgRating && (
-              <div className="mt-6 inline-flex items-center gap-3 bg-white px-4 py-3 rounded-xl border border-stone-200 shadow-sm">
+              <div className="mt-6 inline-flex flex-wrap items-center gap-2 sm:gap-3 bg-white px-3 sm:px-4 py-3 rounded-xl border border-stone-200 shadow-sm">
                 <div className="flex items-center gap-1 text-amber-400">
                   <Star className="w-5 h-5 fill-current" />
                   <span className="font-bold text-stone-900 text-lg">{avgRating}</span>

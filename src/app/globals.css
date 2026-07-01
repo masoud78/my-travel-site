@@ -201,8 +201,12 @@ body {
   line-height: 1.4;
   color: var(--color-ink);
 }
-.prose-fa h2 { font-size: 1.5rem; margin-block: 1.5em 0.75em; }
-.prose-fa h3 { font-size: 1.25rem; margin-block: 1.25em 0.5em; }
+.prose-fa h2 { font-size: 1.25rem; margin-block: 1.25em 0.5em; }
+.prose-fa h3 { font-size: 1.125rem; margin-block: 1em 0.5em; }
+@media (min-width: 640px) {
+  .prose-fa h2 { font-size: 1.5rem; margin-block: 1.5em 0.75em; }
+  .prose-fa h3 { font-size: 1.25rem; margin-block: 1.25em 0.5em; }
+}
 .prose-fa p {
   line-height: 1.9;
   color: var(--color-ink-soft);

@@ -32,7 +32,7 @@ export default async function GalleryPage() {
         <Section>
           <SectionHeading title="خاطرات مسافران" subtitle="گوشه‌ای از تجربه‌ی سفر با ریوان سفر" />
           {items.length > 0 ? (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
               {items.map((item) => (
                 <div
                   key={item.id}
