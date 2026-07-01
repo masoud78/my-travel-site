@@ -620,8 +620,9 @@ export default async function TourDetailPage({ params }: TourDetailPageProps) {
               title="تورهای مشابه"
               subtitle="تورهای پیشنهادی با مقصد یا دسته‌بندی مشابه"
               action={
-                <Link href="/tours" className="text-sm font-semibold text-primary hover:underline">
-                  همه تورها →
+                <Link href="/tours" className="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline">
+                  همه تورها
+                  <ArrowLeft className="w-4 h-4 scale-x-[-1]" />
                 </Link>
               }
             />

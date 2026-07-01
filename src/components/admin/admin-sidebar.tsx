@@ -17,7 +17,6 @@ import {
   Users,
   LogOut,
   ChevronLeft,
-  GalleryHorizontal,
   ImageIcon,
   Tags,
 } from "lucide-react";
@@ -43,7 +42,6 @@ const ADMIN_MENU = [
   { label: "درخواست‌ها", href: "/admin/requests", icon: Inbox, perm: "requests.read" },
   { label: "نظرات", href: "/admin/reviews", icon: MessageSquare, perm: "reviews.read" },
   { label: "منوها", href: "/admin/menus", icon: Menu, perm: "menus.read" },
-  { label: "گالری", href: "/admin/gallery", icon: GalleryHorizontal, perm: "media.*" },
   { label: "رسانه", href: "/admin/media", icon: ImageIcon, perm: "media.*" },
   { label: "تنظیمات", href: "/admin/settings", icon: Settings, perm: "seo.*" },
   { label: "کاربران و تیم", href: "/admin/users", icon: Users, perm: "*" },

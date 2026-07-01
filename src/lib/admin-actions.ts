@@ -672,7 +672,7 @@ export async function getGalleryItems() {
 export async function createGalleryItem(data: GalleryItemInput) {
   await requireAuth();
   const item = await prisma.galleryItem.create({ data });
-  revalidatePath("/admin/gallery");
+  revalidatePath("/admin/settings");
   revalidatePath("/gallery");
   return item;
 }
@@ -680,7 +680,7 @@ export async function createGalleryItem(data: GalleryItemInput) {
 export async function updateGalleryItem(id: string, data: Partial<GalleryItemInput>) {
   await requireAuth();
   const item = await prisma.galleryItem.update({ where: { id }, data });
-  revalidatePath("/admin/gallery");
+  revalidatePath("/admin/settings");
   revalidatePath("/gallery");
   return item;
 }
@@ -688,7 +688,7 @@ export async function updateGalleryItem(id: string, data: Partial<GalleryItemInp
 export async function deleteGalleryItem(id: string) {
   await requireAuth();
   await prisma.galleryItem.delete({ where: { id } });
-  revalidatePath("/admin/gallery");
+  revalidatePath("/admin/settings");
   revalidatePath("/gallery");
 }
 
@@ -1047,8 +1047,11 @@ export type MenuSettingInput = {
 };
 
 export async function getMenuSettings() {
-  await requireAuth();
   return prisma.menuSetting.findMany({ orderBy: { location: "asc" } });
+}
+
+export async function getPublicMenuSettings() {
+  return prisma.menuSetting.findMany({ where: { isActive: true } });
 }
 
 export async function upsertMenuSetting(data: MenuSettingInput) {

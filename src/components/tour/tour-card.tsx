@@ -58,12 +58,12 @@ export function TourCard({ tour }: TourCardProps) {
       className="group relative flex flex-col rounded-2xl overflow-hidden bg-white border border-stone-200 hover:border-primary-200 hover:shadow-lg transition-all duration-300"
     >
       {/* Image */}
-      <div className="relative aspect-[4/3] overflow-hidden bg-stone-100">
+      <div className="relative aspect-[16/10] overflow-hidden bg-stone-100">
         <Image
           src={imageUrl}
           alt={tour.title}
           fill
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           className="object-cover group-hover:scale-105 transition-transform duration-500"
         />
         <div className="absolute top-3 right-3 flex flex-col gap-1.5 items-end">
@@ -92,30 +92,30 @@ export function TourCard({ tour }: TourCardProps) {
       </div>
 
       {/* Body */}
-      <div className="flex-1 flex flex-col p-4 gap-3">
-        <h3 className="font-bold text-base text-stone-900 line-clamp-2 group-hover:text-primary transition-colors min-h-[3rem]">
+      <div className="flex-1 flex flex-col p-3 gap-2">
+        <h3 className="font-bold text-sm text-stone-900 line-clamp-2 group-hover:text-primary transition-colors min-h-[2.75rem]">
           {tour.title}
         </h3>
 
-        <div className="flex flex-wrap items-center gap-3 text-xs text-stone-500">
+        <div className="flex flex-wrap items-center gap-2 text-[11px] text-stone-500">
           <span className="flex items-center gap-1">
-            <Clock className="w-3.5 h-3.5" />
+            <Clock className="w-3 h-3" />
             {tour.duration} شب
           </span>
           <span className="flex items-center gap-1">
-            <Plane className="w-3.5 h-3.5" />
+            <Plane className="w-3 h-3" />
             {tour.airline ? airlineLabel : transportLabel}
           </span>
           {tour.startDate && (
             <span className="flex items-center gap-1">
-              <Calendar className="w-3.5 h-3.5" />
+              <Calendar className="w-3 h-3" />
               {tour.startDate}
             </span>
           )}
         </div>
 
         {tour.hotelStars && (
-          <div className="flex items-center gap-1 text-amber-500 text-sm" aria-label={`هتل ${tour.hotelStars} ستاره`}>
+          <div className="flex items-center gap-1 text-amber-500 text-xs" aria-label={`هتل ${tour.hotelStars} ستاره`}>
             {Array.from({ length: tour.hotelStars }).map((_, i) => (
               <span key={i}>★</span>
             ))}
@@ -129,14 +129,14 @@ export function TourCard({ tour }: TourCardProps) {
           </div>
         )}
 
-        <div className="mt-auto pt-3 border-t border-stone-100 flex items-end justify-between">
+        <div className="mt-auto pt-2 border-t border-stone-100 flex items-end justify-between">
           <div>
             <div className="text-[10px] text-stone-400">شروع قیمت</div>
-            <div className="font-bold text-primary text-lg">
+            <div className="font-bold text-primary text-base">
               {formatPrice(tour.price)}
             </div>
           </div>
-          <div className="text-xs font-semibold text-secondary bg-secondary-50 px-3 py-1.5 rounded-lg">
+          <div className="text-[11px] font-semibold text-secondary bg-secondary-50 px-2.5 py-1 rounded-lg">
             مشاهده تور
           </div>
         </div>

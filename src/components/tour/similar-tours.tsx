@@ -33,7 +33,7 @@ export function SimilarToursCarousel({ tours }: SimilarToursProps) {
             className="p-2 rounded-full bg-white border border-stone-200 text-stone-600 hover:bg-stone-50 disabled:opacity-40 transition-colors"
             aria-label="صفحه قبل"
           >
-            <ChevronRight className="w-5 h-5" />
+            <ChevronLeft className="w-5 h-5" />
           </button>
           <span className="text-sm text-stone-500">
             {page + 1} / {totalPages}
@@ -45,7 +45,7 @@ export function SimilarToursCarousel({ tours }: SimilarToursProps) {
             className="p-2 rounded-full bg-white border border-stone-200 text-stone-600 hover:bg-stone-50 disabled:opacity-40 transition-colors"
             aria-label="صفحه بعد"
           >
-            <ChevronLeft className="w-5 h-5" />
+            <ChevronRight className="w-5 h-5" />
           </button>
         </div>
       )}

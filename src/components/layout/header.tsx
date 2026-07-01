@@ -105,7 +105,7 @@ export function Header({
               aria-label={`تماس با ${SITE_CONFIG.name}`}
             >
               <Phone className="w-4 h-4" />
-              <span className="font-mono" dir="ltr">{phoneDisplay}</span>
+              <span className="tabular-nums tracking-wide" dir="ltr">{phoneDisplay}</span>
             </a>
             <a
               href={`tel:${phoneNumber}`}

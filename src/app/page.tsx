@@ -8,7 +8,7 @@ import { TourCard } from "@/components/tour/tour-card";
 import { CallbackForm } from "@/components/common/callback-form";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Search, Users, Award, MapPin, TrendingUp, Star, Wallet, Headphones, ShieldCheck, HeartHandshake, Sparkles, CheckCircle2 } from "lucide-react";
+import { Search, Users, Award, MapPin, TrendingUp, Star, Wallet, Headphones, ShieldCheck, HeartHandshake, Sparkles, CheckCircle2, ArrowLeft } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { Suspense } from "react";
 import { TourCardSkeleton } from "@/components/tour/tour-card";
@@ -98,8 +98,9 @@ async function FeaturedToursSection() {
         title="تورهای محبوب"
         subtitle="پرطرفدارترین تورهای این هفته را ببینید"
         action={
-          <Link href="/tours" className="text-sm font-semibold text-primary hover:underline">
-            مشاهده همه →
+          <Link href="/tours" className="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline">
+            مشاهده همه
+            <ArrowLeft className="w-4 h-4 scale-x-[-1]" />
           </Link>
         }
       />
@@ -226,8 +227,9 @@ async function ReviewsSection() {
         title="نظرات مشتریان"
         subtitle="تجربه‌ی واقعی مسافران ما"
         action={
-          <Link href="/reviews" className="text-sm font-semibold text-primary hover:underline">
-            همه نظرات →
+          <Link href="/reviews" className="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline">
+            همه نظرات
+            <ArrowLeft className="w-4 h-4 scale-x-[-1]" />
           </Link>
         }
       />

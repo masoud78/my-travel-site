@@ -73,8 +73,9 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json({ success: true, media });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Upload error:", error);
-    return NextResponse.json({ error: error.message || "خطا در آپلود فایل" }, { status: 500 });
+    const message = error instanceof Error ? error.message : "خطا در آپلود فایل";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

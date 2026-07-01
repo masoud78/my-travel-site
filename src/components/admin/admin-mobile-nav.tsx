@@ -22,7 +22,6 @@ const ADMIN_MENU_MOBILE = [
   { label: "درخواست‌ها", href: "/admin/requests" },
   { label: "نظرات", href: "/admin/reviews" },
   { label: "منوها", href: "/admin/menus" },
-  { label: "گالری", href: "/admin/gallery" },
   { label: "رسانه", href: "/admin/media" },
   { label: "تنظیمات", href: "/admin/settings" },
   { label: "کاربران", href: "/admin/users" },

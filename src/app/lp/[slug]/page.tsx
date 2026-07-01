@@ -196,8 +196,9 @@ export default async function LandingPage({ params }: LandingPageProps) {
               title="تورهای ویژه این کمپین"
               subtitle="پیشنهادهای ویژه و محبوب‌ترین تورهای ما"
               action={
-                <Link href="/tours" className="text-sm font-semibold text-primary hover:underline">
-                  مشاهده همه →
+                <Link href="/tours" className="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline">
+                  مشاهده همه
+                  <ArrowLeft className="w-4 h-4 scale-x-[-1]" />
                 </Link>
               }
             />

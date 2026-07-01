@@ -210,9 +210,13 @@ body {
 }
 .prose-fa ul, .prose-fa ol {
   padding-inline-start: 1.5rem;
+  padding-inline-end: 0;
   line-height: 1.9;
 }
-.prose-fa li { margin-block: 0.25em; }
+.prose-fa li {
+  margin-block: 0.25em;
+  text-align: right;
+}
 .prose-fa a {
   color: var(--color-brand-700);
   text-decoration: underline;
