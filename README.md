@@ -8,7 +8,7 @@
 |---|---|---|
 | **Framework** | Next.js (App Router + Turbopack) | 16.2.9 |
 | **UI** | React + Tailwind CSS 4 + shadcn/ui | 19.2.4 / 4.x |
-| **Database** | Prisma + SQLite (dev) / PostgreSQL (prod) | 5.22.0 |
+| **Database** | Prisma + PostgreSQL (online) / SQLite (legacy dev) | 5.22.0 |
 | **Auth** | JWT + bcrypt | Custom |
 | **Forms** | react-hook-form + Zod | 7.x / 3.x |
 | **Date** | dayjs + jalaliday | شمسی |
@@ -203,11 +203,48 @@ npm run db:reset     # reset دیتابیس
 
 ## 🚀 دیپلوی
 
-### Vercel (پیشنهادی)
+### Runflare / سرور شخصی با PostgreSQL آنلاین
+1. مطمئن شوید دیتابیس PostgreSQL آنلاین در دسترس است:
+   ```bash
+   psql "postgresql://postgres:PASSWORD@remote-fanhab.runflare.com:30224/rivansaferx_db?sslmode=require"
+   ```
+2. تنظیم `.env`:
+   ```bash
+   DATABASE_URL="postgresql://postgres:PASSWORD@remote-fanhab.runflare.com:30224/rivansaferx_db?schema=public&sslmode=require"
+   NEXTAUTH_SECRET="..."
+   NEXT_PUBLIC_SITE_URL="https://your-domain.com"
+   ```
+3. اجرای migration:
+   ```bash
+   npx prisma migrate deploy
+   ```
+4. انتقال داده از SQLite (در صورت نیاز):
+   ```bash
+   npx tsx scripts/migrate-sqlite-to-postgres.ts
+   ```
+5. Seed دیتابیس:
+   ```bash
+   npm run db:seed
+   ```
+6. build و start:
+   ```bash
+   npm run build
+   npm run start
+   ```
+
+### PostgreSQL لوکال با Docker
+```bash
+docker compose up -d
+npm run db:migrate
+npm run db:seed
+npm run dev
+```
+
+### Vercel
 1. Push کد به GitHub
 2. Import در Vercel
 3. تنظیم Environment Variables:
-   - `DATABASE_URL` (PostgreSQL از Vercel Postgres یا Supabase)
+   - `DATABASE_URL`
    - `NEXTAUTH_SECRET`
    - `NEXT_PUBLIC_SITE_URL`
 4. Deploy
@@ -219,6 +256,18 @@ npm run start
 ```
 
 نیاز به PostgreSQL و تنظیم `DATABASE_URL` در `.env.production`
+
+## 🔄 مهاجرت از SQLite به PostgreSQL
+
+پروژه از SQLite به PostgreSQL منتقل شده است. برای انتقال داده‌های موجود:
+
+1. فایل `prisma/dev.db` را نگه دارید.
+2. `.env` را به PostgreSQL متصل کنید.
+3. اجرا کنید:
+   ```bash
+   npx prisma migrate deploy
+   npx tsx scripts/migrate-sqlite-to-postgres.ts
+   ```
 
 ## 📄 لایسنس
 

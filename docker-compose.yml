@@ -1,0 +1,20 @@
+services:
+  postgres:
+    image: postgis/postgis:16-3.3
+    container_name: rivansafar-postgres
+    environment:
+      POSTGRES_USER: rivansafar
+      POSTGRES_PASSWORD: rivansafar123
+      POSTGRES_DB: rivansafar
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rivansafar -d rivansafar"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:

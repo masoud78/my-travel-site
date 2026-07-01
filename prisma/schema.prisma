@@ -1,12 +1,12 @@
 // Prisma schema for رِیوان سفر travel agency
-// SQLite for local dev; switch provider to postgresql for production
+// PostgreSQL provider for production / online hosting
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
