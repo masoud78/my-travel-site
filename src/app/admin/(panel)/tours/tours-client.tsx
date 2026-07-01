@@ -188,6 +188,11 @@ export default function ToursClient({
   const [submitting, setSubmitting] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleting, setDeleting] = useState<Tour | null>(null);
+  const [statusFilter, setStatusFilter] = useState<string>("ALL");
+  const [destinationFilter, setDestinationFilter] = useState<string>("ALL");
+  const [transportFilter, setTransportFilter] = useState<string>("ALL");
+  const [sortBy, setSortBy] = useState<"createdAt" | "startPrice" | "duration">("createdAt");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
 
   const [datesOpen, setDatesOpen] = useState(false);
   const [dateTour, setDateTour] = useState<Tour | null>(null);
@@ -388,6 +393,26 @@ export default function ToursClient({
     }
   }
 
+  const filteredTours = useMemo(() => {
+    let rows = [...tours];
+    if (statusFilter !== "ALL") rows = rows.filter((t) => t.status === statusFilter);
+    if (destinationFilter !== "ALL") rows = rows.filter((t) => t.destinationId === destinationFilter);
+    if (transportFilter !== "ALL") rows = rows.filter((t) => t.transportId === transportFilter);
+    rows.sort((a, b) => {
+      let av: number | string = a[sortBy] as unknown as number | string;
+      let bv: number | string = b[sortBy] as unknown as number | string;
+      if (sortBy === "createdAt") {
+        av = new Date(a.createdAt).getTime();
+        bv = new Date(b.createdAt).getTime();
+      }
+      if (typeof av === "number" && typeof bv === "number") {
+        return sortOrder === "asc" ? av - bv : bv - av;
+      }
+      return sortOrder === "asc" ? String(av).localeCompare(String(bv)) : String(bv).localeCompare(String(av));
+    });
+    return rows;
+  }, [tours, statusFilter, destinationFilter, transportFilter, sortBy, sortOrder]);
+
   const activeDestinations = useMemo(
     () => destinations.filter((d) => d.isActive !== false),
     [destinations]
@@ -478,19 +503,70 @@ export default function ToursClient({
           در حال بارگذاری...
         </div>
       ) : (
-        <DataTable
-          data={tours}
-          columns={columns}
-          keyExtractor={(row) => row.id}
-          onEdit={openEdit}
-          onDelete={confirmDelete}
-          searchKeys={["title", "slug", "originCity"]}
-          actions={(row) => (
-            <Button variant="ghost" size="icon" onClick={() => openDates(row)} title="تاریخ‌های تور">
-              <CalendarDays className="w-4 h-4 text-teal-600" />
+        <>
+          <div className="flex flex-wrap gap-3 items-center">
+            <Select value={statusFilter} onValueChange={setStatusFilter}>
+              <SelectTrigger className="w-40">
+                <SelectValue placeholder="وضعیت" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="ALL">همه وضعیت‌ها</SelectItem>
+                <SelectItem value="PUBLISHED">منتشر شده</SelectItem>
+                <SelectItem value="DRAFT">پیش‌نویس</SelectItem>
+                <SelectItem value="ARCHIVED">بایگانی</SelectItem>
+              </SelectContent>
+            </Select>
+            <Select value={destinationFilter} onValueChange={setDestinationFilter}>
+              <SelectTrigger className="w-44">
+                <SelectValue placeholder="مقصد" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="ALL">همه مقاصد</SelectItem>
+                {destinations.map((d) => (
+                  <SelectItem key={d.id} value={d.id}>{d.name}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Select value={transportFilter} onValueChange={setTransportFilter}>
+              <SelectTrigger className="w-44">
+                <SelectValue placeholder="حمل‌ونقل" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="ALL">همه حمل‌ونقل‌ها</SelectItem>
+                {transports.map((t) => (
+                  <SelectItem key={t.id} value={t.id}>{t.name}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <div className="flex-1" />
+            <Select value={sortBy} onValueChange={(v) => setSortBy(v as any)}>
+              <SelectTrigger className="w-40">
+                <SelectValue placeholder="مرتب‌سازی" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="createdAt">تاریخ ایجاد</SelectItem>
+                <SelectItem value="startPrice">قیمت</SelectItem>
+                <SelectItem value="duration">مدت</SelectItem>
+              </SelectContent>
+            </Select>
+            <Button variant="outline" onClick={() => setSortOrder((o) => (o === "asc" ? "desc" : "asc"))}>
+              {sortOrder === "asc" ? "صعودی ↑" : "نزولی ↓"}
             </Button>
-          )}
-        />
+          </div>
+          <DataTable
+            data={filteredTours}
+            columns={columns}
+            keyExtractor={(row) => row.id}
+            onEdit={openEdit}
+            onDelete={confirmDelete}
+            searchKeys={["title", "slug", "originCity"]}
+            actions={(row) => (
+              <Button variant="ghost" size="icon" onClick={() => openDates(row)} title="تاریخ‌های تور">
+                <CalendarDays className="w-4 h-4 text-teal-600" />
+              </Button>
+            )}
+          />
+        </>
       )}
 
       <FormModal
