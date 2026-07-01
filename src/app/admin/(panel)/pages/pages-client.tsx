@@ -5,7 +5,6 @@ import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectTrigger,
@@ -17,6 +16,7 @@ import { DataTable } from "@/components/admin/data-table";
 import { FormModal } from "@/components/admin/form-modal";
 import { DeleteDialog } from "@/components/admin/delete-dialog";
 import { MediaPicker } from "@/components/admin/media-picker";
+import { RichTextEditor } from "@/components/admin/rich-text-editor";
 import type { MediaItem } from "@/components/admin/media-gallery";
 import { StatusBadge } from "@/components/admin/status-badge";
 import { createPage, updatePage, deletePage } from "@/lib/admin-actions";
@@ -290,12 +290,11 @@ export function PagesClient({ pages, media, canCreate, canUpdate, canDelete }: P
             </div>
           </div>
           <div className="space-y-2">
-            <Label>محتوا</Label>
-            <Textarea
+            <RichTextEditor
+              label="محتوا"
               value={form.content}
-              onChange={(e) => setForm({ ...form, content: e.target.value })}
-              placeholder="محتوای صفحه (HTML/Markdown)"
-              rows={10}
+              onChange={(v) => setForm({ ...form, content: v })}
+              placeholder="محتوای صفحه را اینجا بنویسید..."
             />
           </div>
           {form.type === "LANDING" && (
