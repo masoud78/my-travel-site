@@ -202,97 +202,78 @@ npm run db:reset     # reset دیتابیس
 ```
 
 ## 🚀 دیپلوی
+## 🚀 دیپلوی روی Vercel + Neon PostgreSQL
 
-### Runflare / سرور شخصی با PostgreSQL آنلاین
-1. مطمئن شوید دیتابیس PostgreSQL آنلاین در دسترس است:
-   ```bash
-   psql "postgresql://postgres:PASSWORD@remote-fanhab.runflare.com:30224/rivansaferx_db?sslmode=require"
-   ```
-2. تنظیم `.env`:
-   ```bash
-   DATABASE_URL="postgresql://postgres:PASSWORD@remote-fanhab.runflare.com:30224/rivansaferx_db?schema=public&sslmode=require"
-   NEXTAUTH_SECRET="..."
-   NEXT_PUBLIC_SITE_URL="https://your-domain.com"
-   ```
-3. اجرای migration:
-   ```bash
-   npx prisma migrate deploy
-   ```
-4. انتقال داده از SQLite (در صورت نیاز):
-   ```bash
-   npx tsx scripts/migrate-sqlite-to-postgres.ts
-   ```
-5. Seed دیتابیس:
-   ```bash
-   npm run db:seed
-   ```
-6. build و start:
-   ```bash
-   npm run build
-   npm run start
-   ```
+پروژه برای دیپلوی کامل روی Vercel آماده شده است.
 
-### PostgreSQL لوکال با Docker
+### ۱- ساخت دیتابیس PostgreSQL در Neon
+
+۱. به https://neon.tech برو و ثبت‌نام کن.
+۲. یک پروژه جدید بساز: نام `rivansafar`، region نزدیک (مثلاً `Frankfurt` یا `Stockholm`).
+۳. بعد از ساخت، از بخش **Connection Details** رشته اتصال PostgreSQL را کپی کن:
+
 ```bash
-docker compose up -d
-npm run db:migrate
-npm run db:seed
-npm run dev
+postgresql://user:password@ep-xxxxx.eu-central-1.aws.neon.tech/rivansafar?sslmode=require
 ```
 
-### Vercel
+### ۲- تنظیم Environment Variables در Vercel
 
-۱. Push کد به GitHub
-۲. Import پروژه در [vercel.com](https://vercel.com)
-۳. **قبل از اولین deploy**، در Settings → Environment Variables این متغیرها رو اضافه کن:
+در داشبورد Vercel، پروژه را باز کن و به **Settings → Environment Variables** برو. این متغیرها را اضافه کن:
 
-| متغیر | مقدار نمونه |
+| متغیر | مقدار |
 |---|---|
-| `DATABASE_URL` | `postgresql://postgres:PASSWORD@remote-fanhab.runflare.com:30224/rivansaferx_db?schema=public&sslmode=require` |
-| `NEXTAUTH_SECRET` | یک رشته تصادفی قوی (حداقل ۳۲ کاراکتر) |
+| `DATABASE_URL` | `postgresql://USER:PASSWORD@ep-xxxxx.eu-central-1.aws.neon.tech/rivansafar?sslmode=require` |
+| `NEXTAUTH_SECRET` | یک رشته تصادفی قوی حداقل ۳۲ کاراکتر |
 | `NEXTAUTH_URL` | `https://your-domain.vercel.app` |
 | `NEXT_PUBLIC_SITE_URL` | `https://your-domain.vercel.app` |
 | `NEXT_PUBLIC_SITE_NAME` | `ریوان سفر` |
 
-۴. **Build Command** را روی دستور زیر تنظیم کن:
+### ۳- تنظیم Build Command
+
+در **Settings → Build and Output Settings** مطمئن شو:
+
 ```bash
 npm run vercel-build
 ```
 
-۵. اولین deploy را انجام بده. اگر ارور `Can't reach database server` دیدی، یعنی Vercel نمی‌تواند به Runflare وصل شود. در آن صورت باید دیتابیس را به **Neon** یا **Supabase** منتقل کنی.
+### ۴- اولین Deploy
 
-۶. بعد از اولین deploy موفق، برای ایجاد جداول در دیتابیس، migration را اجرا کن (از Vercel CLI):
+روی **Deploy** بزن. اگر `DATABASE_URL` درست ست شده باشد، Prisma migration به طور خودکار اجرا می‌شود.
+
+### ۵- انتقال داده‌های SQLite قبلی (اختیاری)
+
+اگر می‌خواهی داده‌های `prisma/dev.db` را به Neon منتقل کنی، لوکال دستور زیر را اجرا کن:
+
 ```bash
-vercel env pull
-npx prisma migrate deploy
+# .env لوکال را به Neon متصل کن
+DATABASE_URL="postgresql://USER:PASSWORD@ep-xxxxx.eu-central-1.aws.neon.tech/rivansafar?sslmode=require"
+
+# سپس
+npx tsx scripts/setup-vercel-db.ts
 ```
 
-۷. برای پر کردن دیتابیس با داده‌های اولیه:
+این دستور موارد زیر را انجام می‌دهد:
+- اعمال migrationها
+- انتقال داده از `prisma/dev.db`
+- اجرای seed
+
+### ۶- Seed اولیه (اگر بدون داده قبلی هستی)
+
 ```bash
+vercel env pull
 npx prisma db seed
 ```
 
-### سرور شخصی
-```bash
-npm run build
-npm run start
-```
+### ۷- بررسی نهایی
 
-نیاز به PostgreSQL و تنظیم `DATABASE_URL` در `.env.production`
+بعد از deploy موفق:
+- صفحه اصلی: `https://your-domain.vercel.app`
+- پنل ادمین: `https://your-domain.vercel.app/admin/login`
+- اطلاعات ورود پیش‌فرض:
+  - ایمیل: `admin@rivansafar.com`
+  - رمز عبور: `admin123` (در production حتماً تغییر بده)
 
-## 🔄 مهاجرت از SQLite به PostgreSQL
-
-پروژه از SQLite به PostgreSQL منتقل شده است. برای انتقال داده‌های موجود:
-
-1. فایل `prisma/dev.db` را نگه دارید.
-2. `.env` را به PostgreSQL متصل کنید.
-3. اجرا کنید:
-   ```bash
-   npx prisma migrate deploy
-   npx tsx scripts/migrate-sqlite-to-postgres.ts
-   ```
-
-## 📄 لایسنس
+---
 
 این پروژه برای **ریوان سفر** ساخته شده است.
 
