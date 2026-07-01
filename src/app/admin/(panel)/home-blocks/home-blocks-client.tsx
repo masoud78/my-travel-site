@@ -198,7 +198,7 @@ export function HomeBlocksClient({ blocks, canCreate, canUpdate, canDelete }: Ho
           {
             key: "order",
             title: "ترتیب",
-            render: (row) => <span className="num-en">{row.order}</span>,
+            render: (row) => <span className="tabular-nums">{formatNumber(row.order ?? 0)}</span>,
           },
           {
             key: "isActive",

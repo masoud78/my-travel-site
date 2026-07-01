@@ -36,7 +36,7 @@ import {
   getServiceTemplates,
 } from "@/lib/admin-actions";
 import { formatDateTime } from "@/lib/jalali";
-import { toFa, formatPrice } from "@/lib/utils";
+import { toFa, formatPrice , formatNumber} from "@/lib/utils"
 
 type Tour = Awaited<ReturnType<typeof getTours>>[number];
 type Destination = Awaited<ReturnType<typeof getDestinations>>[number];
