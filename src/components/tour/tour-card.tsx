@@ -134,7 +134,6 @@ export function TourCard({ tour }: TourCardProps) {
             <div className="text-[10px] text-stone-400">شروع قیمت</div>
             <div className="font-bold text-primary text-lg">
               {formatPrice(tour.price)}
-              <span className="text-xs font-normal text-stone-500 mr-1">تومان</span>
             </div>
           </div>
           <div className="text-xs font-semibold text-secondary bg-secondary-50 px-3 py-1.5 rounded-lg">

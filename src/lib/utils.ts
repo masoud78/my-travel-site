@@ -18,11 +18,24 @@ export function toFa(input: string | number): string {
 }
 
 /**
- * Format price in Iranian Toman with separators.
+ * Format price in Iranian Toman with separators and Persian digits.
  */
-export function formatPrice(price: number, faDigits = true): string {
-  const formatted = price.toLocaleString("en-US");
-  return faDigits ? toFa(formatted) : formatted;
+export function formatPrice(amount: number | string | null | undefined, currency = "تومان"): string {
+  if (amount === null || amount === undefined || amount === "") return "-";
+  const num = typeof amount === "string" ? Number(amount) : amount;
+  if (Number.isNaN(num)) return "-";
+  const formatted = num.toLocaleString("en-US");
+  return currency ? `${toFa(formatted)} ${currency}` : toFa(formatted);
+}
+
+/**
+ * Format number with separators and Persian digits.
+ */
+export function formatNumber(amount: number | string | null | undefined): string {
+  if (amount === null || amount === undefined || amount === "") return "-";
+  const num = typeof amount === "string" ? Number(amount) : amount;
+  if (Number.isNaN(num)) return "-";
+  return toFa(num.toLocaleString("en-US"));
 }
 
 /**

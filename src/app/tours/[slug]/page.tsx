@@ -20,6 +20,7 @@ import { SITE_CONFIG } from "@/lib/site-config";
 import {
   safeParse,
   formatPrice,
+  formatNumber,
   truncate,
 } from "@/lib/utils";
 import { ReviewForm } from "@/components/review/review-form";
@@ -346,12 +347,12 @@ export default async function TourDetailPage({ params }: TourDetailPageProps) {
                             <td className="py-3 px-2">{formatJalaliDate(date.departDate)}</td>
                             <td className="py-3 px-2">{formatJalaliDate(date.returnDate)}</td>
                             <td className="py-3 px-2 font-bold text-primary">
-                              {formatPrice(date.price)} تومان
+                              {formatPrice(date.price)}
                             </td>
                             <td className="py-3 px-2">
                               <span className="flex items-center gap-1">
                                 <Users className="w-4 h-4 text-stone-400" />
-                                {date.remaining} / {date.capacity}
+                                {formatNumber(date.remaining)} / {formatNumber(date.capacity)}
                               </span>
                             </td>
                             <td className="py-3 px-2">
@@ -403,16 +404,16 @@ export default async function TourDetailPage({ params }: TourDetailPageProps) {
                               <span className="text-amber-500">{"★".repeat(th.hotel.stars)}</span>
                             </td>
                             <td className="py-3 px-2 font-bold text-primary">
-                              {formatPrice(th.priceDouble)} تومان
+                              {formatPrice(th.priceDouble)}
                             </td>
-                            <td className="py-3 px-2">
-                              {th.priceExtra ? `${formatPrice(th.priceExtra)} تومان` : "-"}
+                            <td className="py-3 px-2 text-stone-600">
+                              {th.priceExtra ? formatPrice(th.priceExtra) : "-"}
                             </td>
-                            <td className="py-3 px-2">
-                              {th.priceChild ? `${formatPrice(th.priceChild)} تومان` : "-"}
+                            <td className="py-3 px-2 text-stone-600">
+                              {th.priceChild ? formatPrice(th.priceChild) : "-"}
                             </td>
-                            <td className="py-3 px-2">
-                              {th.priceInfant ? `${formatPrice(th.priceInfant)} تومان` : "-"}
+                            <td className="py-3 px-2 text-stone-600">
+                              {th.priceInfant ? formatPrice(th.priceInfant) : "-"}
                             </td>
                           </tr>
                         ))}
@@ -543,7 +544,6 @@ export default async function TourDetailPage({ params }: TourDetailPageProps) {
                   <div className="text-sm text-stone-500 mb-1">شروع قیمت از</div>
                   <div className="text-3xl font-bold text-primary mb-4">
                     {formatPrice(tour.startPrice)}
-                    <span className="text-sm font-normal text-stone-500 mr-1">تومان</span>
                   </div>
 
                   <div className="space-y-3 mb-6">
@@ -552,7 +552,7 @@ export default async function TourDetailPage({ params }: TourDetailPageProps) {
                         <Clock className="w-4 h-4" /> مدت
                       </span>
                       <span className="font-medium">
-                        {tour.duration} روز / {tour.nights} شب
+                        {formatNumber(tour.duration)} روز / {formatNumber(tour.nights)} شب
                       </span>
                     </div>
                     <div className="flex items-center justify-between text-sm py-2 border-b border-stone-100">

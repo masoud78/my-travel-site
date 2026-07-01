@@ -5,7 +5,7 @@ import { MediaClient } from "./media-client";
 
 export default async function AdminMediaPage() {
   const user = await getCurrentUser();
-  if (!user || !hasPermission(user.role as Role, "media.*")) redirect("/admin/login");
+  if (!user || !hasPermission(user.role as Role, "media.read")) redirect("/admin/login");
 
   const media = await getMedia();
   return <MediaClient data={media} canManage={hasPermission(user.role as Role, "media.*")} />;

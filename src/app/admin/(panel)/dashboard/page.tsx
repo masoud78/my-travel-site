@@ -14,6 +14,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 import { prisma } from "@/lib/prisma";
+import { formatNumber } from "@/lib/jalali";
 import { getCurrentUser, ROLE_LABELS, type Role } from "@/lib/auth";
 
 export default async function AdminDashboardPage() {
@@ -79,7 +80,7 @@ export default async function AdminDashboardPage() {
                 <TrendingUp className="w-5 h-5 text-stone-300 group-hover:text-primary transition-colors" />
               </div>
               <div className="mt-4">
-                <div className="text-3xl font-bold text-stone-900">{stat.value}</div>
+                <div className="text-3xl font-bold text-stone-900">{formatNumber(stat.value)}</div>
                 <div className="text-sm text-stone-500 mt-1">{stat.label}</div>
               </div>
             </Link>

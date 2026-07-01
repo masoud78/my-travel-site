@@ -28,6 +28,8 @@ export function toPersianDigits(input: string | number): string {
   return toFa(input);
 }
 
+export { formatPrice, formatNumber } from "@/lib/utils";
+
 export function formatJalaliDate(date: Date | string | number): string {
   const d = new Date(date);
   const formatter = new Intl.DateTimeFormat("fa-IR-u-ca-persian", {

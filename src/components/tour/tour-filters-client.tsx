@@ -310,7 +310,7 @@ function TourFiltersInner({
               </div>
               {priceRange.max > 0 && (
                 <div className="text-xs text-stone-400 mt-1">
-                  بازه: {formatPrice(priceRange.min)} تا {formatPrice(priceRange.max)} تومان
+                  بازه: {formatPrice(priceRange.min)} تا {formatPrice(priceRange.max)}
                 </div>
               )}
             </div>
