@@ -10,17 +10,30 @@
 
 const { execSync } = require("child_process");
 
+function normalizePooledUrl(url) {
+  if (!url) return url;
+  const u = new URL(url);
+  // Neon pooler is PgBouncer; Prisma needs this flag.
+  u.searchParams.set("pgbouncer", "true");
+  u.searchParams.set("connect_timeout", "10");
+  // channel_binding is not supported through PgBouncer
+  u.searchParams.delete("channel_binding");
+  return u.toString();
+}
+
 function firstValid(...candidates) {
   return candidates.find((v) => typeof v === "string" && v.startsWith("postgresql://"));
 }
 
 function mapDatabaseUrls() {
-  const pooled = firstValid(
+  const rawPooled = firstValid(
     process.env.dbrivan_DATABASE_URL,
     process.env.POSTGRES_PRISMA_URL,
     process.env.POSTGRES_URL,
     process.env.DATABASE_URL
   );
+
+  const pooled = normalizePooledUrl(rawPooled);
 
   let unpooled = firstValid(
     process.env.dbrivan_DATABASE_URL_UNPOOLED,
@@ -41,7 +54,7 @@ function mapDatabaseUrls() {
 
   if (!unpooled) {
     console.warn("DATABASE_URL_UNPOOLED not found; using DATABASE_URL as fallback. For Neon, add dbrivan_DATABASE_URL_UNPOOLED or POSTGRES_URL_NON_POOLING.");
-    unpooled = pooled;
+    unpooled = rawPooled;
   }
 
   process.env.DATABASE_URL = pooled;
