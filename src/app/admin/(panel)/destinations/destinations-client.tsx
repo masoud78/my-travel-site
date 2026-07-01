@@ -244,17 +244,27 @@ export default function AdminDestinationsClient({
       {
         key: "order",
         title: "ترتیب",
-        render: (row: Destination) => <span className="num-en">{row.order}</span>,
+        render: (row: Destination) => <span>{formatNumber(row.order ?? 0)}</span>,
       },
       {
         key: "isActive",
         title: "وضعیت",
-        render: (row: Destination) =>
-          row.isActive ? (
-            <StatusBadge type="success">فعال</StatusBadge>
-          ) : (
-            <StatusBadge type="danger">غیرفعال</StatusBadge>
-          ),
+        render: (row: Destination) => (
+          <div className="flex items-center gap-2">
+            <Switch
+              checked={row.isActive}
+              onCheckedChange={async (checked) => {
+                await updateDestination(row.id, { isActive: checked });
+                const data = await getDestinations();
+                setDestinations(data);
+              }}
+              aria-label={row.isActive ? "فعال" : "غیرفعال"}
+            />
+            <span className={`text-xs ${row.isActive ? "text-emerald-600" : "text-stone-400"}`}>
+              {row.isActive ? "فعال" : "غیرفعال"}
+            </span>
+          </div>
+        ),
       },
     ],
     []
@@ -334,11 +344,11 @@ export default function AdminDestinationsClient({
                     ))}
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-1">
-                        <Button variant="ghost" size="icon" onClick={() => openEdit(row)}>
-                          <ChevronLeft className="w-4 h-4 text-blue-600" />
+                        <Button variant="ghost" size="icon" onClick={() => openEdit(row)} title="ویرایش">
+                          <Pencil className="w-4 h-4 text-stone-600" />
                         </Button>
-                        <Button variant="ghost" size="icon" onClick={() => confirmDelete(row)}>
-                          <ChevronRight className="w-4 h-4 text-red-600" />
+                        <Button variant="ghost" size="icon" onClick={() => confirmDelete(row)} title="حذف">
+                          <Trash2 className="w-4 h-4 text-red-600" />
                         </Button>
                       </div>
                     </td>
