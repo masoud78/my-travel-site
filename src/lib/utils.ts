@@ -18,6 +18,18 @@ export function toFa(input: string | number): string {
 }
 
 /**
+ * Format bytes to human-readable string.
+ */
+export function formatBytes(bytes: number, decimals = 2): string {
+  if (bytes === 0) return "۰ بایت";
+  const k = 1024;
+  const sizes = ["بایت", "کیلوبایت", "مگابایت", "گیگابایت", "ترابایت"];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  const value = parseFloat((bytes / Math.pow(k, i)).toFixed(decimals));
+  return `${toFa(value.toString())} ${sizes[i]}`;
+}
+
+/**
  * Format price in Iranian Toman with separators and Persian digits.
  */
 export function formatPrice(amount: number | string | null | undefined, currency = "تومان"): string {
