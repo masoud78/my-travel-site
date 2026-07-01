@@ -62,6 +62,11 @@ export default function AdminHotelsPage() {
   const [submitting, setSubmitting] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleting, setDeleting] = useState<Hotel | null>(null);
+  const [starsFilter, setStarsFilter] = useState<string>("ALL");
+  const [cityFilter, setCityFilter] = useState<string>("ALL");
+  const [countryFilter, setCountryFilter] = useState<string>("ALL");
+  const [sortBy, setSortBy] = useState<"name" | "stars">("name");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
   useEffect(() => {
     let mounted = true;
@@ -144,6 +149,23 @@ export default function AdminHotelsPage() {
     }
   }
 
+  const cities = useMemo(() => Array.from(new Set(hotels.map((h) => h.city).filter(Boolean))).sort(), [hotels]);
+  const countries = useMemo(() => Array.from(new Set(hotels.map((h) => h.country).filter(Boolean))).sort(), [hotels]);
+
+  const filteredHotels = useMemo(() => {
+    let rows = [...hotels];
+    if (starsFilter !== "ALL") rows = rows.filter((h) => String(h.stars) === starsFilter);
+    if (cityFilter !== "ALL") rows = rows.filter((h) => h.city === cityFilter);
+    if (countryFilter !== "ALL") rows = rows.filter((h) => h.country === countryFilter);
+    rows.sort((a, b) => {
+      if (sortBy === "stars") {
+        return sortOrder === "asc" ? a.stars - b.stars : b.stars - a.stars;
+      }
+      return sortOrder === "asc" ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
+    });
+    return rows;
+  }, [hotels, starsFilter, cityFilter, countryFilter, sortBy, sortOrder]);
+
   const columns = useMemo(
     () => [
       {
@@ -222,14 +244,56 @@ export default function AdminHotelsPage() {
           در حال بارگذاری...
         </div>
       ) : (
-        <DataTable
-          data={hotels}
-          columns={columns}
-          keyExtractor={(row) => row.id}
-          onEdit={openEdit}
-          onDelete={confirmDelete}
-          searchKeys={["name", "nameEn", "city", "country"]}
-        />
+        <>
+          <div className="flex flex-wrap gap-3 items-center">
+            <Select value={starsFilter} onValueChange={setStarsFilter}>
+              <SelectTrigger className="w-36"><SelectValue placeholder="ستاره" /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="ALL">همه ستاره‌ها</SelectItem>
+                {[1,2,3,4,5].map((s) => (
+                  <SelectItem key={s} value={String(s)}>{s} ستاره</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Select value={cityFilter} onValueChange={setCityFilter}>
+              <SelectTrigger className="w-44"><SelectValue placeholder="شهر" /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="ALL">همه شهرها</SelectItem>
+                {cities.map((c) => (
+                  <SelectItem key={c} value={c}>{c}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Select value={countryFilter} onValueChange={setCountryFilter}>
+              <SelectTrigger className="w-44"><SelectValue placeholder="کشور" /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="ALL">همه کشورها</SelectItem>
+                {countries.map((c) => (
+                  <SelectItem key={c} value={c}>{c}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <div className="flex-1" />
+            <Select value={sortBy} onValueChange={(v) => setSortBy(v as any)}>
+              <SelectTrigger className="w-40"><SelectValue placeholder="مرتب‌سازی" /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="name">نام</SelectItem>
+                <SelectItem value="stars">ستاره</SelectItem>
+              </SelectContent>
+            </Select>
+            <Button variant="outline" onClick={() => setSortOrder((o) => (o === "asc" ? "desc" : "asc"))}>
+              {sortOrder === "asc" ? "صعودی ↑" : "نزولی ↓"}
+            </Button>
+          </div>
+          <DataTable
+            data={filteredHotels}
+            columns={columns}
+            keyExtractor={(row) => row.id}
+            onEdit={openEdit}
+            onDelete={confirmDelete}
+            searchKeys={["name", "nameEn", "city", "country"]}
+          />
+        </>
       )}
 
       <FormModal
