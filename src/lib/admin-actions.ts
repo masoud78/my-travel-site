@@ -69,6 +69,8 @@ export type DestinationInput = {
   slug: string;
   type: string;
   parentId?: string | null;
+  countryId?: string | null;
+  continentId?: string | null;
   description?: string;
   image?: string;
   metaTitle?: string;
@@ -77,11 +79,30 @@ export type DestinationInput = {
   isActive?: boolean;
 };
 
+function normalizeDestinationData(data: Partial<DestinationInput>) {
+  const updateData: Record<string, unknown> = { ...data };
+  // For CITY, parentId is country; store denormalized ids for convenience
+  if (data.type === "CITY") {
+    updateData.countryId = data.parentId || null;
+    // optionally derive continentId if parent country known
+  }
+  if (data.type === "COUNTRY") {
+    updateData.continentId = data.parentId || null;
+    updateData.countryId = null;
+  }
+  if (data.type === "CONTINENT") {
+    updateData.parentId = null;
+    updateData.countryId = null;
+    updateData.continentId = null;
+  }
+  return updateData;
+}
+
 export async function getDestinations() {
   await requireAuth();
   return prisma.destination.findMany({
-    include: { parent: { select: { name: true, slug: true } } },
-    orderBy: { createdAt: "desc" },
+    include: { parent: { select: { id: true, name: true, slug: true, type: true } } },
+    orderBy: [{ type: "asc" }, { order: "asc" }, { name: "asc" }],
   });
 }
 
@@ -89,7 +110,7 @@ export async function getDestinationsTree() {
   const user = await getCurrentUser();
   if (!user) throw new Error("UNAUTHORIZED");
   const all = await prisma.destination.findMany({
-    include: { children: true, parent: { select: { id: true, name: true, slug: true } } },
+    include: { children: true, parent: { select: { id: true, name: true, slug: true, type: true } } },
     orderBy: [{ order: "asc" }, { name: "asc" }],
   });
   const roots = all.filter((d) => !d.parentId);
@@ -101,7 +122,8 @@ export async function getDestinationsTree() {
 
 export async function createDestination(data: DestinationInput) {
   await requireAuth();
-  const dest = await prisma.destination.create({ data });
+  const payload = normalizeDestinationData(data);
+  const dest = await prisma.destination.create({ data: payload as DestinationInput });
   revalidatePath("/admin/destinations");
   revalidatePath("/tours");
   return dest;
@@ -109,7 +131,8 @@ export async function createDestination(data: DestinationInput) {
 
 export async function updateDestination(id: string, data: Partial<DestinationInput>) {
   await requireAuth();
-  const dest = await prisma.destination.update({ where: { id }, data });
+  const payload = normalizeDestinationData(data);
+  const dest = await prisma.destination.update({ where: { id }, data: payload });
   revalidatePath("/admin/destinations");
   revalidatePath("/tours");
   return dest;
@@ -209,6 +232,7 @@ export type TourInput = {
   transportType: string;
   startPrice: number;
   destinationId?: string | null;
+  destinationIds?: string[];
   transportId?: string | null;
   originCity?: string;
   origins?: string[];
@@ -229,16 +253,22 @@ export type TourInput = {
 export async function getTours() {
   await requireAuth();
   return prisma.tour.findMany({
-    include: { destination: true, transport: true, author: { select: { name: true } } },
+    include: {
+      destination: true,
+      destinations: true,
+      transport: true,
+      author: { select: { name: true } },
+    },
     orderBy: { createdAt: "desc" },
   });
 }
 
 export async function createTour(data: TourInput) {
   const user = await requireAuth();
+  const { destinationIds, ...rest } = data;
   const tour = await prisma.tour.create({
     data: {
-      ...data,
+      ...rest,
       nights: data.nights ?? 0,
       origins: JSON.stringify(data.origins ?? []),
       images: JSON.stringify(data.images ?? []),
@@ -247,6 +277,9 @@ export async function createTour(data: TourInput) {
       requirements: JSON.stringify(data.requirements ?? []),
       authorId: user.id,
       publishedAt: data.status === "PUBLISHED" ? new Date() : null,
+      destinations: destinationIds?.length
+        ? { connect: destinationIds.map((id) => ({ id })) }
+        : undefined,
     },
   });
   revalidatePath("/admin/tours");
@@ -256,13 +289,17 @@ export async function createTour(data: TourInput) {
 
 export async function updateTour(id: string, data: Partial<TourInput>) {
   await requireAuth();
-  const updateData: Record<string, unknown> = { ...data };
+  const { destinationIds, ...rest } = data;
+  const updateData: Record<string, unknown> = { ...rest };
   if (data.origins) updateData.origins = JSON.stringify(data.origins);
   if (data.images) updateData.images = JSON.stringify(data.images);
   if (data.includes) updateData.includes = JSON.stringify(data.includes);
   if (data.excludes) updateData.excludes = JSON.stringify(data.excludes);
   if (data.requirements) updateData.requirements = JSON.stringify(data.requirements);
   if (data.status === "PUBLISHED") updateData.publishedAt = new Date();
+  if (destinationIds !== undefined) {
+    updateData.destinations = { set: destinationIds.map((id) => ({ id })) };
+  }
   const tour = await prisma.tour.update({ where: { id }, data: updateData });
   revalidatePath("/admin/tours");
   revalidatePath("/tours");
@@ -1077,4 +1114,72 @@ export async function deleteMenuSetting(id: string) {
   await prisma.menuSetting.delete({ where: { id } });
   revalidatePath("/admin/menus");
   revalidatePath("/");
+}
+
+// ===== TOUR CATEGORIES =====
+export type TourCategoryInput = {
+  title: string;
+  slug: string;
+  subtitle?: string;
+  description?: string;
+  image?: string;
+  destinationIds?: string[];
+  hotelStars?: number | null;
+  transportType?: string | null;
+  originCity?: string | null;
+  tourIds?: string[];
+  metaTitle?: string;
+  metaDesc?: string;
+  keywords?: string;
+  ogImage?: string;
+  status?: string;
+  order?: number;
+  isActive?: boolean;
+};
+
+export async function getTourCategories() {
+  await requireAuth();
+  return prisma.tourCategory.findMany({ orderBy: [{ order: "asc" }, { createdAt: "desc" }] });
+}
+
+export async function getActiveTourCategories() {
+  return prisma.tourCategory.findMany({
+    where: { isActive: true, status: "PUBLISHED" },
+    orderBy: [{ order: "asc" }, { createdAt: "desc" }],
+  });
+}
+
+export async function getTourCategoryBySlug(slug: string) {
+  return prisma.tourCategory.findUnique({ where: { slug } });
+}
+
+export async function createTourCategory(data: TourCategoryInput) {
+  await requireAuth();
+  const cat = await prisma.tourCategory.create({
+    data: {
+      ...data,
+      destinationIds: JSON.stringify(data.destinationIds ?? []),
+      tourIds: JSON.stringify(data.tourIds ?? []),
+    },
+  });
+  revalidatePath("/admin/categories");
+  revalidatePath(`/c/${cat.slug}`);
+  return cat;
+}
+
+export async function updateTourCategory(id: string, data: Partial<TourCategoryInput>) {
+  await requireAuth();
+  const updateData: Record<string, unknown> = { ...data };
+  if (data.destinationIds !== undefined) updateData.destinationIds = JSON.stringify(data.destinationIds);
+  if (data.tourIds !== undefined) updateData.tourIds = JSON.stringify(data.tourIds);
+  const cat = await prisma.tourCategory.update({ where: { id }, data: updateData });
+  revalidatePath("/admin/categories");
+  revalidatePath(`/c/${cat.slug}`);
+  return cat;
+}
+
+export async function deleteTourCategory(id: string) {
+  await requireAuth();
+  await prisma.tourCategory.delete({ where: { id } });
+  revalidatePath("/admin/categories");
 }

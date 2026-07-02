@@ -40,14 +40,19 @@ model Destination {
   name        String   // e.g. "آنتالیا"
   nameEn      String?
   slug        String   @unique // e.g. "antalya"
-  type        String   // CONTINENT, COUNTRY, CITY, SEASON, MONTH
+  type        String   // CONTINENT, COUNTRY, CITY
+
+  // Hierarchy: CONTINENT -> COUNTRY (parentId=continent) -> CITY (parentId=country)
   parentId    String?
   parent      Destination?  @relation("DestinationHierarchy", fields: [parentId], references: [id])
   children    Destination[] @relation("DestinationHierarchy")
 
+  // Only used for CITY type
+  countryId   String?
+  continentId String?
+
   description String?  // SEO-rich description
   image       String?
-  podcastUrl  String?  // مقصد podcast audio
   metaTitle   String?
   metaDesc    String?
 
@@ -56,7 +61,10 @@ model Destination {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  tours       Tour[]
+  // Tours where this is the primary destination
+  primaryTours Tour[]  @relation("TourPrimaryDestination")
+  // Tours assigned to this destination (multi-destination support)
+  tours       Tour[]   @relation("TourDestinations")
 }
 
 // ============================================
@@ -112,8 +120,11 @@ model Tour {
   transportType String   // PLANE, TRAIN, BUS, ROAD, MIXED
   startPrice    Float
 
+  // Tour destinations (multiple)
   destinationId String?
-  destination   Destination? @relation(fields: [destinationId], references: [id])
+  destination   Destination? @relation("TourPrimaryDestination", fields: [destinationId], references: [id])
+  destinations  Destination[] @relation("TourDestinations")
+
   transportId   String?
   transport     Transport?   @relation(fields: [transportId], references: [id])
 
@@ -122,8 +133,9 @@ model Tour {
 
   images        String   @default("[]")  // JSON
   thumbnail     String?
-  podcastUrl    String?  // مشاور سفر podcast
 
+  // Tour-specific hotel assignments
+  tourHotels    TourHotel[]
   // included/excluded services
   includes      String   @default("[]")
   excludes      String   @default("[]")
@@ -149,9 +161,11 @@ model Tour {
   publishedAt   DateTime?
 
   tourDates     TourDate[]
-  tourHotels    TourHotel[]
   reviews       Review[]
   faqs          TourFaq[]
+
+  // Manual category assignments
+  categories    TourCategory[] @relation("CategoryTours")
 }
 
 // ============================================
@@ -367,6 +381,41 @@ model Page {
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+// ============================================
+// TOUR CATEGORIES (custom tour listing pages)
+// e.g. "تور کیش هتل 5 ستاره" or "تور آنتالیا با پرواز ماهان"
+// ============================================
+model TourCategory {
+  id            String        @id @default(cuid())
+  title         String
+  slug          String        @unique
+  subtitle      String?
+  description   String?       // rich text intro
+  image         String?
+
+  // Filters applied to the category page (AND logic)
+  destinationIds String       @default("[]") // JSON array of Destination IDs
+  hotelStars    Int?          // optional star filter
+  transportType String?       // optional transport filter
+  originCity    String?       // optional origin city filter
+
+  // Manually selected tours shown on the page
+  tourIds       String        @default("[]") // JSON array of selected Tour IDs
+  tours         Tour[]        @relation("CategoryTours")
+
+  metaTitle     String?
+  metaDesc      String?
+  keywords      String?
+  ogImage       String?
+
+  status        String        @default("PUBLISHED")
+  order         Int           @default(0)
+  isActive      Boolean       @default(true)
+
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 }
 
 // ============================================

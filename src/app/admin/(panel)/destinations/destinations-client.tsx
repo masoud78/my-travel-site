@@ -34,23 +34,19 @@ const DESTINATION_TYPES = [
   { value: "CONTINENT", label: "قاره" },
   { value: "COUNTRY", label: "کشور" },
   { value: "CITY", label: "شهر" },
-  { value: "SEASON", label: "فصل" },
-  { value: "MONTH", label: "ماه" },
 ];
 
 const ALLOWED_PARENT: Record<string, string[]> = {
   CONTINENT: [],
   COUNTRY: ["CONTINENT"],
   CITY: ["COUNTRY"],
-  SEASON: [],
-  MONTH: [],
 };
 
 const emptyForm = {
   name: "",
   nameEn: "",
   slug: "",
-  type: "COUNTRY",
+  type: "CITY",
   parentId: "",
   description: "",
   image: "",
