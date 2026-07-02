@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Plus, CalendarDays, Clock, Pencil, Trash2 } from "lucide-react";
+import { Plus, CalendarDays, Clock, Pencil, Trash2, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
   SelectContent,
@@ -84,6 +85,7 @@ const emptyTourForm = {
   transportType: "PLANE",
   startPrice: "",
   destinationId: "",
+  destinationIds: [] as string[],
   transportId: "",
   originCity: "",
   origins: "",
@@ -228,6 +230,7 @@ export default function ToursClient({
       transportType: tour.transportType,
       startPrice: String(tour.startPrice),
       destinationId: tour.destinationId || "",
+      destinationIds: (tour.destinations || []).map((d) => d.id),
       transportId: tour.transportId || "",
       originCity: tour.originCity || "",
       origins: toLines(tour.origins),
@@ -261,6 +264,7 @@ export default function ToursClient({
         transportType: form.transportType,
         startPrice: Number(form.startPrice) || 0,
         destinationId: form.destinationId || null,
+        destinationIds: form.destinationIds.length ? form.destinationIds : (form.destinationId ? [form.destinationId] : []),
         transportId: form.transportId || null,
         originCity: form.originCity || undefined,
         origins: toArray(form.origins),
@@ -696,28 +700,48 @@ export default function ToursClient({
           </div>
 
           <div className="space-y-2">
-            <Label>مقصد</Label>
-            <Select
-              value={form.destinationId || "none"}
-              onValueChange={(v) => setForm((f) => ({ ...f, destinationId: v === "none" ? "" : v }))}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="انتخاب مقصد" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="none">بدون مقصد</SelectItem>
+            <Label className="flex items-center gap-2">
+              <MapPin className="w-4 h-4" />
+              مقصدها
+            </Label>
+            <div className="rounded-xl border border-stone-200 bg-white p-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-60 overflow-y-auto">
                 {destinationOptions.map((root) => (
-                  <SelectGroup key={root.id}>
-                    <SelectItem value={root.id}>{root.name}</SelectItem>
+                  <div key={root.id} className="space-y-1">
+                    <label className="flex items-center gap-2 text-sm font-semibold text-stone-800 cursor-pointer">
+                      <Checkbox
+                        checked={form.destinationIds.includes(root.id)}
+                        onCheckedChange={() =>
+                          setForm((f) => ({
+                            ...f,
+                            destinationIds: f.destinationIds.includes(root.id)
+                              ? f.destinationIds.filter((x) => x !== root.id)
+                              : [...f.destinationIds, root.id],
+                          }))
+                        }
+                      />
+                      {root.name}
+                    </label>
                     {root.children.map((child) => (
-                      <SelectItem key={child.id} value={child.id}>
+                      <label key={child.id} className="flex items-center gap-2 text-sm text-stone-600 cursor-pointer pr-6">
+                        <Checkbox
+                          checked={form.destinationIds.includes(child.id)}
+                          onCheckedChange={() =>
+                            setForm((f) => ({
+                              ...f,
+                              destinationIds: f.destinationIds.includes(child.id)
+                                ? f.destinationIds.filter((x) => x !== child.id)
+                                : [...f.destinationIds, child.id],
+                            }))
+                          }
+                        />
                         {root.name} → {child.name}
-                      </SelectItem>
+                      </label>
                     ))}
-                  </SelectGroup>
+                  </div>
                 ))}
-              </SelectContent>
-            </Select>
+              </div>
+            </div>
           </div>
 
           <div className="space-y-2">
