@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { headers } from "next/headers";
 import "./globals.css";
 import { HeaderContainer } from "@/components/layout/header-container";
 import { FooterContainer } from "@/components/layout/footer-container";
@@ -83,17 +84,21 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const h = await headers();
+  const pathname = h.get("x-pathname") || "/";
+  const isAdmin = pathname.startsWith("/admin");
+
   return (
     <html lang="fa" dir="rtl" className={vazirmatn.variable}>
       <body className="antialiased">
-        <HeaderContainer />
+        {!isAdmin && <HeaderContainer />}
         {children}
-        <FooterContainer />
+        {!isAdmin && <FooterContainer />}
       </body>
     </html>
   );
