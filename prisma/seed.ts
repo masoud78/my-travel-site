@@ -21,21 +21,28 @@ async function main() {
   });
   console.log("✅ Admin user:", admin.email);
 
-  // 2. Destinations
+  // 2. Destinations (hierarchical: CONTINENT -> COUNTRY -> CITY)
   const destData = [
-    { name: "ترکیه", nameEn: "Turkey", slug: "turkey", type: "COUNTRY", parentSlug: null, image: "/images/destinations/antalya.jpg", description: "کشور چهارفصل با فرهنگی ترکیبی از شرق و غرب." },
-    { name: "آنتالیا", nameEn: "Antalya", slug: "antalya", type: "CITY", parentSlug: "turkey", image: "/images/destinations/antalya.jpg", description: "پرطرفدارترین مقصد ساحلی ترکیه با هتل‌های متنوع." },
-    { name: "استانبول", nameEn: "Istanbul", slug: "istanbul", type: "CITY", parentSlug: "turkey", image: "/images/destinations/istanbul.jpg", description: "شهری تاریخی روی دو قاره آسیا و اروپا." },
-    { name: "دبی", nameEn: "Dubai", slug: "dubai", type: "CITY", parentSlug: null, image: "/images/destinations/dubai.jpg", description: "شهر مدرن امارات با جاذبه‌های لوکس و خرید." },
-    { name: "مشهد", nameEn: "Mashhad", slug: "mashhad", type: "CITY", parentSlug: null, image: "/images/destinations/mashhad.jpg", description: "شهر مقدس ایران و مقصد زیارتی اصلی." },
-    { name: "شیراز", nameEn: "Shiraz", slug: "shiraz", type: "CITY", parentSlug: null, image: "/images/destinations/shiraz.jpg", description: "شهر عشق و ادب با آثار تاریخی هخامنشی و صفوی." },
-    { name: "کیش", nameEn: "Kish", slug: "kish", type: "CITY", parentSlug: null, image: "/images/destinations/kish.jpg", description: "جزیره مرجانی خلیج فارس با مراکز خرید و تفریحات دریایی." },
-    { name: "گرجستان", nameEn: "Georgia", slug: "georgia", type: "COUNTRY", parentSlug: null, image: "/images/destinations/tbilisi.jpg", description: "مقصدی مقرون‌به‌صرفه با طبیعت خیره‌کننده و معماری اروپایی." },
-    { name: "تفلیس", nameEn: "Tbilisi", slug: "tbilisi", type: "CITY", parentSlug: "georgia", image: "/images/destinations/tbilisi.jpg", description: "پایتخت گرجستان با کوچه‌های سنگفرش و حمام‌های گوگردی." },
-    { name: "تایلند", nameEn: "Thailand", slug: "thailand", type: "COUNTRY", parentSlug: null, image: "/images/destinations/bangkok.jpg", description: "سرزمین لبخند با سواحل استوایی و معابد طلایی." },
-    { name: "پوکت", nameEn: "Phuket", slug: "phuket", type: "CITY", parentSlug: "thailand", image: "/images/destinations/bangkok.jpg", description: "بزرگ‌ترین جزیره تایلند با سواحل کریستالی." },
-    { name: "ایتالیا", nameEn: "Italy", slug: "italy", type: "COUNTRY", parentSlug: null, image: "/images/destinations/rome.jpg", description: "میهن هنر، تاریخ و غذاهای لذیذ." },
-    { name: "رم", nameEn: "Rome", slug: "rome", type: "CITY", parentSlug: "italy", image: "/images/destinations/rome.jpg", description: "شهر ابدی با کولوسئوم، واتیکان و فواره‌ها." },
+    // Continents
+    { name: "آسیا", nameEn: "Asia", slug: "asia", type: "CONTINENT", parentSlug: null, image: "/images/destinations/asia.jpg", description: "بزرگ‌ترین قاره جهان با تنوع فرهنگی و طبیعی." },
+    { name: "اروپا", nameEn: "Europe", slug: "europe", type: "CONTINENT", parentSlug: null, image: "/images/destinations/europe.jpg", description: "قاره تاریخی و فرهنگی." },
+    // Countries
+    { name: "ترکیه", nameEn: "Turkey", slug: "turkey", type: "COUNTRY", parentSlug: "asia", image: "/images/destinations/antalya.jpg", description: "کشور چهارفصل با فرهنگی ترکیبی از شرق و غرب." },
+    { name: "امارات", nameEn: "UAE", slug: "uae", type: "COUNTRY", parentSlug: "asia", image: "/images/destinations/dubai.jpg", description: "کشور مدرن امارات." },
+    { name: "ایران", nameEn: "Iran", slug: "iran", type: "COUNTRY", parentSlug: "asia", image: "/images/destinations/iran.jpg", description: "سرزمین تاریخ و فرهنگ." },
+    { name: "گرجستان", nameEn: "Georgia", slug: "georgia", type: "COUNTRY", parentSlug: "asia", image: "/images/destinations/tbilisi.jpg", description: "مقصدی مقرون‌به‌صرفه با طبیعت خیره‌کننده." },
+    { name: "تایلند", nameEn: "Thailand", slug: "thailand", type: "COUNTRY", parentSlug: "asia", image: "/images/destinations/bangkok.jpg", description: "سرزمین لبخند با سواحل استوایی." },
+    { name: "ایتالیا", nameEn: "Italy", slug: "italy", type: "COUNTRY", parentSlug: "europe", image: "/images/destinations/rome.jpg", description: "میهن هنر و تاریخ." },
+    // Cities
+    { name: "آنتالیا", nameEn: "Antalya", slug: "antalya", type: "CITY", parentSlug: "turkey", image: "/images/destinations/antalya.jpg", description: "پرطرفدارترین مقصد ساحلی ترکیه." },
+    { name: "استانبول", nameEn: "Istanbul", slug: "istanbul", type: "CITY", parentSlug: "turkey", image: "/images/destinations/istanbul.jpg", description: "شهری تاریخی روی دو قاره." },
+    { name: "دبی", nameEn: "Dubai", slug: "dubai", type: "CITY", parentSlug: "uae", image: "/images/destinations/dubai.jpg", description: "شهر مدرن امارات با جاذبه‌های لوکس." },
+    { name: "مشهد", nameEn: "Mashhad", slug: "mashhad", type: "CITY", parentSlug: "iran", image: "/images/destinations/mashhad.jpg", description: "شهر مقدس ایران." },
+    { name: "شیراز", nameEn: "Shiraz", slug: "shiraz", type: "CITY", parentSlug: "iran", image: "/images/destinations/shiraz.jpg", description: "شهر عشق و ادب." },
+    { name: "کیش", nameEn: "Kish", slug: "kish", type: "CITY", parentSlug: "iran", image: "/images/destinations/kish.jpg", description: "جزیره مرجانی خلیج فارس." },
+    { name: "تفلیس", nameEn: "Tbilisi", slug: "tbilisi", type: "CITY", parentSlug: "georgia", image: "/images/destinations/tbilisi.jpg", description: "پایتخت گرجستان." },
+    { name: "پوکت", nameEn: "Phuket", slug: "phuket", type: "CITY", parentSlug: "thailand", image: "/images/destinations/bangkok.jpg", description: "بزرگ‌ترین جزیره تایلند." },
+    { name: "رم", nameEn: "Rome", slug: "rome", type: "CITY", parentSlug: "italy", image: "/images/destinations/rome.jpg", description: "شهر ابتی." },
   ];
 
   const destMap = new Map<string, string>();
