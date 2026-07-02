@@ -44,7 +44,7 @@ export function MobileCTABar() {
         <Button
           asChild
           variant="purple"
-          size="icon-lg"
+          size="iconLg"
           className="rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all"
         >
           <Link href="/">
@@ -57,7 +57,7 @@ export function MobileCTABar() {
         <Button
           asChild
           variant="accent"
-          size="icon-lg"
+          size="iconLg"
           className="rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all"
         >
           <Link href="/search">
