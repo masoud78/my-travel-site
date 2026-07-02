@@ -15,7 +15,7 @@ interface CmsPageProps {
 export async function generateMetadata({ params }: CmsPageProps): Promise<Metadata> {
   const { slug } = await params;
   const page = await prisma.page.findFirst({
-    where: { slug, type: { in: ["PAGE", "CONTENT"] }, status: "PUBLISHED" },
+    where: { slug, type: { in: ["PAGE", "CONTENT", "STATIC", "LANDING"] }, status: "PUBLISHED" },
   });
 
   if (!page) return {};
@@ -31,7 +31,7 @@ export default async function CmsPage({ params }: CmsPageProps) {
   const { slug } = await params;
 
   const page = await prisma.page.findFirst({
-    where: { slug, type: { in: ["PAGE", "CONTENT"] }, status: "PUBLISHED" },
+    where: { slug, type: { in: ["PAGE", "CONTENT", "STATIC", "LANDING"] }, status: "PUBLISHED" },
   });
 
   if (!page) return notFound();

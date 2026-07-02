@@ -49,7 +49,7 @@ const STATUS_OPTIONS = [
 ];
 
 const TYPE_OPTIONS = [
-  { value: "STATIC", label: "صفحه ثابت" },
+  { value: "PAGE", label: "صفحه ثابت" },
   { value: "LANDING", label: "لندینگ" },
 ];
 
@@ -65,7 +65,7 @@ const emptyForm = {
   title: "",
   slug: "",
   content: "",
-  type: "STATIC",
+  type: "PAGE",
   campaignBanner: "",
   campaignCta: "",
   metaTitle: "",
