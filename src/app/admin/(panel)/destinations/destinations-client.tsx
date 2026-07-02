@@ -38,6 +38,14 @@ const DESTINATION_TYPES = [
   { value: "MONTH", label: "ماه" },
 ];
 
+const ALLOWED_PARENT: Record<string, string[]> = {
+  CONTINENT: [],
+  COUNTRY: ["CONTINENT"],
+  CITY: ["COUNTRY"],
+  SEASON: [],
+  MONTH: [],
+};
+
 const emptyForm = {
   name: "",
   nameEn: "",
@@ -161,8 +169,8 @@ export default function AdminDestinationsClient({
   }
 
   const eligibleParents = useMemo(
-    () => destinations.filter((d) => !editing || d.id !== editing.id),
-    [destinations, editing]
+    () => destinations.filter((d) => (!editing || d.id !== editing.id) && ALLOWED_PARENT[form.type]?.includes(d.type)),
+    [destinations, editing, form.type]
   );
 
   const roots = useMemo(
@@ -428,8 +436,9 @@ export default function AdminDestinationsClient({
             <Select
               value={form.parentId || "none"}
               onValueChange={(v) => setForm((f) => ({ ...f, parentId: v === "none" ? "" : v }))}
+              disabled={ALLOWED_PARENT[form.type]?.length === 0}
             >
-              <SelectTrigger><SelectValue placeholder="بدون والد" /></SelectTrigger>
+              <SelectTrigger><SelectValue placeholder={ALLOWED_PARENT[form.type]?.length === 0 ? "بدون والد" : "انتخاب والد"} /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="none">بدون والد</SelectItem>
                 {eligibleParents.map((d) => (
@@ -439,6 +448,11 @@ export default function AdminDestinationsClient({
                 ))}
               </SelectContent>
             </Select>
+            {ALLOWED_PARENT[form.type]?.length > 0 && (
+              <p className="text-xs text-stone-500">
+                برای {DESTINATION_TYPES.find((t) => t.value === form.type)?.label} باید یکی از {ALLOWED_PARENT[form.type].map((t) => DESTINATION_TYPES.find((dt) => dt.value === t)?.label).join(" / ")} انتخاب شود.
+              </p>
+            )}
           </div>
 
           <div className="space-y-2 md:col-span-2">
