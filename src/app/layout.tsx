@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { headers } from "next/headers";
 import "./globals.css";
+import { SiteShell } from "@/components/layout/site-shell";
 import { HeaderContainer } from "@/components/layout/header-container";
 import { FooterContainer } from "@/components/layout/footer-container";
 import { SITE_CONFIG } from "@/lib/site-config";
@@ -84,21 +84,17 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const h = await headers();
-  const pathname = h.get("x-pathname") || "/";
-  const isAdmin = pathname.startsWith("/admin");
-
   return (
     <html lang="fa" dir="rtl" className={vazirmatn.variable}>
       <body className="antialiased">
-        {!isAdmin && <HeaderContainer />}
-        {children}
-        {!isAdmin && <FooterContainer />}
+        <SiteShell header={<HeaderContainer />} footer={<FooterContainer />}>
+          {children}
+        </SiteShell>
       </body>
     </html>
   );
