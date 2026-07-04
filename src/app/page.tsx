@@ -6,18 +6,36 @@ import { TourCard } from "@/components/tour/tour-card";
 import { CallbackForm } from "@/components/common/callback-form";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Search, Users, Award, MapPin, TrendingUp, Star, Wallet, Headphones, ShieldCheck, HeartHandshake, Sparkles, CheckCircle2, ArrowLeft } from "lucide-react";
+import { HeroSearchWidget } from "@/components/home/hero-search";
+import {
+  Search,
+  Users,
+  Award,
+  MapPin,
+  TrendingUp,
+  Star,
+  Wallet,
+  Headphones,
+  ShieldCheck,
+  HeartHandshake,
+  Sparkles,
+  CheckCircle2,
+  ArrowLeft,
+  Phone,
+  MessageCircle,
+} from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { Suspense } from "react";
 import { TourCardSkeleton } from "@/components/tour/tour-card";
 import { getActiveHomeBlocks } from "@/lib/admin-actions";
-import type { Tour, Destination } from "@prisma/client";
+import { SITE_CONFIG } from "@/lib/site-config";
 
 export default async function HomePage() {
   return (
     <div className="min-h-screen flex flex-col">
       <main className="flex-1">
         <HeroSection />
+        <HeroSearchWidget />
         <Suspense fallback={<TourSectionSkeleton />}>
           <HomeBlocksSection />
         </Suspense>
@@ -135,7 +153,7 @@ async function HomeBlockRenderer({ block }: { block: { id: string; title: string
 function HeroSection() {
   return (
     <section className="relative overflow-hidden">
-      {/* Background image */}
+      {/* Background image with modern gradient overlay */}
       <div className="absolute inset-0">
         <Image
           src="/images/hero/hero-home.jpg"
@@ -145,36 +163,69 @@ function HeroSection() {
           sizes="100vw"
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-stone-900/80 via-stone-900/50 to-transparent" />
+        {/* Modern gradient: dark at edges, lighter in center for better text contrast */}
+        <div className="absolute inset-0 bg-gradient-to-b from-stone-900/60 via-stone-900/20 to-stone-900/80" />
+        {/* Subtle radial gradient for depth */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent" />
       </div>
 
-      <div className="container mx-auto px-3 sm:px-4 py-14 sm:py-20 md:py-28 relative z-10">
-        <div className="max-w-xl sm:max-w-2xl">
-          <Badge variant="accent" className="mb-3 md:mb-4 text-xs sm:text-sm gap-1">
-            <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
-            ویژه نوروز ۱۴۰۵
+      <div className="container mx-auto px-3 sm:px-4 py-16 sm:py-24 md:py-32 relative z-10">
+        <div className="max-w-xl sm:max-w-2xl lg:max-w-3xl">
+          {/* Modern badge with glow effect */}
+          <Badge variant="accent" className="mb-4 md:mb-6 text-xs sm:text-sm gap-1.5 shadow-lg shadow-accent/25">
+            <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            ویژه نوروز ۱۴۰۵ — رزرو فوری با تخفیف ویژه
           </Badge>
-          <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4 md:mb-6 drop-shadow-sm">
-            سفری <span className="text-accent-300">روان</span> با{" "}
-            <span className="text-white">ریوان سفر</span>
+
+          {/* Hero headline with modern typography */}
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-tight mb-5 md:mb-7 drop-shadow-xl">
+            سفری 
+            <span className="relative inline-block">
+              <span className="text-accent-300">روان</span>
+              <span className="absolute inset-0 bg-accent/20 blur-2xl rounded-full -z-10" />
+            </span>
+            <br className="hidden sm:block" />
+            با <span className="text-white">ریوان سفر</span>
           </h1>
-          <p className="text-base sm:text-lg md:text-xl text-stone-100 leading-relaxed mb-6 md:mb-8 drop-shadow-sm">
+
+          {/* Subheading with better readability */}
+          <p className="text-base sm:text-lg md:text-xl text-stone-100 leading-relaxed mb-8 md:mb-10 drop-shadow-sm max-w-lg">
             تورهای داخلی و خارجی با بهترین قیمت، مشاوره‌ی تخصصی رایگان و پشتیبانی ۲۴ ساعته.
+            <br />
             سفر بعدی‌تان را با ما بسازید.
           </p>
-          <div className="flex flex-col sm:flex-row gap-3">
-            <Button asChild size="lg" variant="cta" className="w-full sm:w-auto shadow-lg h-12 px-6 text-base">
+
+          {/* Modern CTA buttons with glass effect */}
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+            <Button asChild size="lg" variant="cta" className="w-full sm:w-auto shadow-lg shadow-primary/25 h-12 px-6 text-base font-bold">
               <Link href="/tours">
                 <Search className="w-5 h-5" />
                 مشاهده تمام تورها
               </Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="w-full sm:w-auto bg-white/10 text-white border-white/30 hover:bg-white/20 hover:text-white h-12 px-6 text-base">
-              <Link href="/contact">تماس با مشاور</Link>
+            <Button asChild size="lg" variant="outline" className="w-full sm:w-auto bg-white/10 backdrop-blur-sm text-white border-white/30 hover:bg-white/20 hover:text-white h-12 px-6 text-base font-bold">
+              <Link href="/contact">
+                <MessageCircle className="w-5 h-5" />
+                تماس با مشاور
+              </Link>
             </Button>
+          </div>
+
+          {/* Floating contact info for mobile */}
+          <div className="mt-8 sm:hidden">
+            <a
+              href={`tel:${SITE_CONFIG.defaultPhone}`}
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white/95 backdrop-blur-sm text-stone-800 shadow-lg hover:shadow-xl transition-shadow"
+            >
+              <Phone className="w-5 h-5 text-primary" />
+              <span className="font-bold text-sm tabular-nums" dir="ltr">{SITE_CONFIG.defaultPhoneDisplay}</span>
+            </a>
           </div>
         </div>
       </div>
+
+      {/* Decorative elements */}
+      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-surface to-transparent -z-10" />
     </section>
   );
 }
@@ -245,16 +296,22 @@ function StatsSection() {
   ];
 
   return (
-    <Section className="bg-primary text-white">
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8 text-center">
+    <Section className="bg-primary text-white py-12 sm:py-16">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 text-center">
         {stats.map((stat, idx) => (
-          <div key={idx} className="flex flex-col items-center gap-2 sm:gap-3">
-            <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-white/10 backdrop-blur-sm flex items-center justify-center">
-              <stat.icon className="w-6 h-6 sm:w-8 sm:h-8" />
+          <div key={idx} className="relative">
+            {/* Glassmorphism circle */}
+            <div className="absolute inset-0 flex items-center justify-center -z-10">
+              <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-full bg-white/5 backdrop-blur-lg" />
             </div>
-            <div>
-              <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1">{stat.value}</div>
-              <div className="text-xs sm:text-sm text-primary-100">{stat.label}</div>
+            <div className="relative flex flex-col items-center gap-3">
+              <div className="w-14 h-14 sm:w-18 sm:h-18 rounded-2xl bg-white/10 backdrop-blur-sm flex items-center justify-center border border-white/20">
+                <stat.icon className="w-7 h-7 sm:w-9 sm:h-9" />
+              </div>
+              <div>
+                <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 num-en">{stat.value}</div>
+                <div className="text-xs sm:text-sm text-primary-100">{stat.label}</div>
+              </div>
             </div>
           </div>
         ))}

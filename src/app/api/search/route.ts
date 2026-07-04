@@ -31,7 +31,6 @@ export async function GET(req: Request) {
 
     const where: Record<string, unknown> = {
       status: "PUBLISHED",
-      isActive: true,
     };
 
     if (q?.trim()) {

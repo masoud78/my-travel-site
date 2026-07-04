@@ -5,7 +5,17 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
-import { prisma } from "./prisma";
+import { PrismaClient } from "@prisma/client";
+
+let cachedPrisma: PrismaClient | undefined;
+
+function getPrisma() {
+  if (cachedPrisma) return cachedPrisma;
+  cachedPrisma = new PrismaClient();
+  return cachedPrisma;
+}
+
+const prisma = getPrisma();
 
 const JWT_SECRET = process.env.JWT_SECRET || "rivansafar-dev-secret-change-me-in-prod";
 const COOKIE_NAME = "rivansafar_session";

@@ -49,3 +49,4 @@ public/uploads/
 # logs
 logs
 *.log
+.env.neon-backup

@@ -283,11 +283,6 @@ export default async function TourDetailPage({ params }: TourDetailPageProps) {
               {/* Gallery */}
               <TourImageGallery images={imageGalleryImages} title={tour.title} thumbnail={tour.thumbnail} />
 
-              {/* Podcast */}
-              {tour.podcastUrl && (
-                <AudioPlayer src={tour.podcastUrl} title="مشاوره سفر صوتی" />
-              )}
-
               {/* Description */}
               <div className="bg-white rounded-2xl border border-stone-200 p-6 md:p-8">
                 <SectionHeading title="درباره تور" className="mb-4" />

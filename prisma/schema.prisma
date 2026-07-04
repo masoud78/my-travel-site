@@ -6,9 +6,8 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL") // pooled connection (Prisma Client)
-  directUrl = env("DATABASE_URL_UNPOOLED") // direct connection (migrations)
+  provider  = "sqlite"
+  url       = env("DATABASE_URL")
 }
 
 // ============================================

@@ -8,6 +8,11 @@ function mapDatabaseUrlFromVercelNeon() {
     process.env.POSTGRES_URL ||
     process.env.dbrivan_DATABASE_URL;
 
+  // Skip URL normalization for SQLite (file: protocol)
+  if (!pooled || pooled.startsWith("file:")) {
+    return;
+  }
+
   const unpooled =
     process.env.DATABASE_URL_UNPOOLED ||
     process.env.POSTGRES_URL_NON_POOLING ||
