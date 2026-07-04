@@ -71,5 +71,5 @@ function run(cmd) {
 
 mapDatabaseUrls();
 run("npx prisma generate");
-run("npx prisma migrate deploy");
+run("npx prisma db push --accept-data-loss");
 run("next build");
