@@ -292,3 +292,47 @@ body:has(.safe-area-inset-bottom) {
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+/* ============================================
+   Persian (Jalali) Date Picker Theming
+   ============================================ */
+.jalali-datepicker {
+  --cd-color-primary: var(--color-primary-700, #0369a1);
+  --cd-color-secondary: var(--color-primary-50, #f0f9ff);
+  --cd-color-accent: var(--color-accent-500, #f97316);
+  --cd-color-bg: #ffffff;
+  --cd-color-text: #1c1917;
+  --cd-color-gray: #78716c;
+  --cd-color-success: #14b8a6;
+  --cd-color-danger: #ef4444;
+  --cd-day-width: 36px;
+  --cd-day-height: 36px;
+  --cd-day-font: 14px;
+  font-family: var(--font-sans);
+}
+.jalali-datepicker-modal {
+  transform: translateX(-50%) !important;
+}
+
+/* Hero gradient pattern */
+.hero-pattern {
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(14, 165, 233, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(249, 115, 22, 0.12) 0%, transparent 50%);
+}
+
+/* Hero floating shapes */
+@keyframes heroFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+}
+.hero-float {
+  animation: heroFloat 6s ease-in-out infinite;
+}
+@keyframes heroFloatDelay {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-18px); }
+}
+.hero-float-delay {
+  animation: heroFloatDelay 7s ease-in-out 1s infinite;
+}

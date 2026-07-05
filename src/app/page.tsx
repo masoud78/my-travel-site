@@ -4,7 +4,6 @@ import { MobileCTABar } from "@/components/layout/mobile-cta-bar";
 import { Section, SectionHeading } from "@/components/common/section";
 import { TourCard } from "@/components/tour/tour-card";
 import { CallbackForm } from "@/components/common/callback-form";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { HeroSearchWidget } from "@/components/home/hero-search";
 import {
@@ -19,23 +18,25 @@ import {
   ShieldCheck,
   HeartHandshake,
   Sparkles,
-  CheckCircle2,
   ArrowLeft,
-  Phone,
+  CheckCircle2,
   MessageCircle,
 } from "lucide-react";
 import { prisma } from "@/lib/prisma";
 import { Suspense } from "react";
 import { TourCardSkeleton } from "@/components/tour/tour-card";
 import { getActiveHomeBlocks } from "@/lib/admin-actions";
-import { SITE_CONFIG } from "@/lib/site-config";
 
 export default async function HomePage() {
+  const destinations = await prisma.destination.findMany({
+    select: { id: true, name: true, slug: true, type: true },
+    orderBy: [{ type: "asc" }, { name: "asc" }],
+  });
+
   return (
     <div className="min-h-screen flex flex-col">
       <main className="flex-1">
-        <HeroSection />
-        <HeroSearchWidget />
+        <HeroSection destinations={destinations} />
         <Suspense fallback={<TourSectionSkeleton />}>
           <HomeBlocksSection />
         </Suspense>
@@ -150,10 +151,10 @@ async function HomeBlockRenderer({ block }: { block: { id: string; title: string
   );
 }
 
-function HeroSection() {
+function HeroSection({ destinations }: { destinations: { id: string; name: string; slug: string; type: string }[] }) {
   return (
     <section className="relative overflow-hidden">
-      {/* Background image with modern gradient overlay */}
+      {/* Background image */}
       <div className="absolute inset-0">
         <Image
           src="/images/hero/hero-home.jpg"
@@ -163,69 +164,89 @@ function HeroSection() {
           sizes="100vw"
           className="object-cover"
         />
-        {/* Modern gradient: dark at edges, lighter in center for better text contrast */}
-        <div className="absolute inset-0 bg-gradient-to-b from-stone-900/60 via-stone-900/20 to-stone-900/80" />
-        {/* Subtle radial gradient for depth */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent" />
+        {/* Multi-layer gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-bl from-primary-950/85 via-primary-900/70 to-stone-900/80" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20" />
+        {/* Decorative pattern */}
+        <div className="absolute inset-0 hero-pattern opacity-50" />
       </div>
 
-      <div className="container mx-auto px-3 sm:px-4 py-16 sm:py-24 md:py-32 relative z-10">
-        <div className="max-w-xl sm:max-w-2xl lg:max-w-3xl">
-          {/* Modern badge with glow effect */}
-          <Badge variant="accent" className="mb-4 md:mb-6 text-xs sm:text-sm gap-1.5 shadow-lg shadow-accent/25">
-            <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-            ویژه نوروز ۱۴۰۵ — رزرو فوری با تخفیف ویژه
-          </Badge>
+      {/* Decorative floating shapes */}
+      <div className="absolute top-16 right-8 w-32 h-32 bg-accent-500/20 rounded-full blur-3xl hero-float" />
+      <div className="absolute bottom-24 left-12 w-40 h-40 bg-primary-400/30 rounded-full blur-3xl hero-float-delay" />
+      <div className="absolute top-32 left-1/3 w-3 h-3 bg-accent-400 rounded-full hero-float opacity-70" />
+      <div className="absolute bottom-32 right-1/4 w-2 h-2 bg-primary-300 rounded-full hero-float-delay opacity-70" />
 
-          {/* Hero headline with modern typography */}
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-tight mb-5 md:mb-7 drop-shadow-xl">
-            سفری 
-            <span className="relative inline-block">
-              <span className="text-accent-300">روان</span>
-              <span className="absolute inset-0 bg-accent/20 blur-2xl rounded-full -z-10" />
-            </span>
-            <br className="hidden sm:block" />
-            با <span className="text-white">ریوان سفر</span>
-          </h1>
-
-          {/* Subheading with better readability */}
-          <p className="text-base sm:text-lg md:text-xl text-stone-100 leading-relaxed mb-8 md:mb-10 drop-shadow-sm max-w-lg">
-            تورهای داخلی و خارجی با بهترین قیمت، مشاوره‌ی تخصصی رایگان و پشتیبانی ۲۴ ساعته.
-            <br />
-            سفر بعدی‌تان را با ما بسازید.
-          </p>
-
-          {/* Modern CTA buttons with glass effect */}
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-            <Button asChild size="lg" variant="cta" className="w-full sm:w-auto shadow-lg shadow-primary/25 h-12 px-6 text-base font-bold">
-              <Link href="/tours">
-                <Search className="w-5 h-5" />
-                مشاهده تمام تورها
-              </Link>
-            </Button>
-            <Button asChild size="lg" variant="outline" className="w-full sm:w-auto bg-white/10 backdrop-blur-sm text-white border-white/30 hover:bg-white/20 hover:text-white h-12 px-6 text-base font-bold">
-              <Link href="/contact">
-                <MessageCircle className="w-5 h-5" />
-                تماس با مشاور
-              </Link>
-            </Button>
+      {/* Hero content */}
+      <div className="container mx-auto px-4 pt-16 pb-32 sm:pt-20 sm:pb-36 md:pt-24 md:pb-40 relative z-10">
+        <div className="max-w-3xl">
+          {/* Brand badge */}
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 mb-5">
+            <Sparkles className="w-3.5 h-3.5 text-accent-400" />
+            <span className="text-white/90 text-xs sm:text-sm font-semibold tracking-wide">آژانس مسافرتی ریوان سفر</span>
           </div>
 
-          {/* Floating contact info for mobile */}
-          <div className="mt-8 sm:hidden">
-            <a
-              href={`tel:${SITE_CONFIG.defaultPhone}`}
-              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-white/95 backdrop-blur-sm text-stone-800 shadow-lg hover:shadow-xl transition-shadow"
-            >
-              <Phone className="w-5 h-5 text-primary" />
-              <span className="font-bold text-sm tabular-nums" dir="ltr">{SITE_CONFIG.defaultPhoneDisplay}</span>
-            </a>
+          {/* Main headline */}
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white leading-[1.15] mb-4 sm:mb-5 drop-shadow-2xl">
+            همسفر روان شما در{" "}
+            <span className="relative inline-block">
+              <span className="bg-gradient-to-l from-accent-300 via-accent-400 to-accent-500 bg-clip-text text-transparent">
+                دنیای سفر
+              </span>
+              <span className="absolute inset-0 bg-accent/30 blur-2xl rounded-full -z-10" />
+            </span>
+          </h1>
+
+          {/* Subheadline */}
+          <p className="text-base sm:text-lg md:text-xl text-white/90 leading-relaxed mb-6 sm:mb-8 max-w-2xl drop-shadow-md">
+            تورهای داخلی و خارجی با <span className="font-bold text-accent-300">بهترین قیمت</span>، مشاوره‌ی تخصصی رایگان و پشتیبانی ۲۴ ساعته.
+          </p>
+
+          {/* Hero stats row */}
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 mb-6 sm:mb-8">
+            <div className="flex items-center gap-2">
+              <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-accent-500/20 backdrop-blur-sm">
+                <ShieldCheck className="w-4 h-4 text-accent-400" />
+              </div>
+              <span className="text-white/90 text-sm font-medium">رزرو مطمئن</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-accent-500/20 backdrop-blur-sm">
+                <Award className="w-4 h-4 text-accent-400" />
+              </div>
+              <span className="text-white/90 text-sm font-medium">+۱۰ سال تجربه</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-accent-500/20 backdrop-blur-sm">
+                <HeartHandshake className="w-4 h-4 text-accent-400" />
+              </div>
+              <span className="text-white/90 text-sm font-medium">پشتیبانی ۲۴/۷</span>
+            </div>
+          </div>
+
+          {/* CTA buttons */}
+          <div className="flex flex-row gap-3">
+            <Button asChild size="lg" className="bg-gradient-to-l from-accent-500 to-accent-600 hover:from-accent-600 hover:to-accent-700 text-white shadow-xl shadow-accent-500/40 h-12 px-6 text-base font-bold border-0">
+              <Link href="/tours">
+                <Search className="w-5 h-5" />
+                <span>مشاهده تورها</span>
+              </Link>
+            </Button>
+            <Button asChild size="lg" variant="outline" className="bg-white/10 backdrop-blur-md text-white border-white/30 hover:bg-white/20 hover:text-white h-12 px-6 text-base font-bold">
+              <Link href="/contact">
+                <MessageCircle className="w-5 h-5" />
+                <span>مشاوره رایگان</span>
+              </Link>
+            </Button>
           </div>
         </div>
       </div>
 
-      {/* Decorative elements */}
-      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-surface to-transparent -z-10" />
+      {/* Search widget — overlapping bottom of hero */}
+      <HeroSearchWidget destinations={destinations} />
+
+      {/* Decorative fade */}
+      <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-surface to-transparent -z-10" />
     </section>
   );
 }
