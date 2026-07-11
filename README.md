@@ -87,14 +87,16 @@ rivansafar/
 
 ## 🎨 طراحی و رنگ‌بندی
 
-پالت رنگ بر اساس **روان‌شناسی رنگ** برای آژانس مسافرتی:
+طراحی با **تم Modern**: نچرال‌های آرام (zinc) + یک اکسنت ظریف teal/cyan + کارت‌های لایه‌ای نرم.
+ترکیبی از اعتماد (teal) + سفر (cyan) + آرامش بصری (نچرال‌های خنثی) — سبک، حرفه‌ای و اپ‌مانند.
 
 | نقش | رنگ | دلیل انتخاب |
 |---|---|---|
-| **Primary** | آبی عمیق `#0c4a6e` | اعتماد، تخصص، آرامش |
-| **Secondary (CTA)** | نارنجی `#f97316` | اشتیاق، ماجراجویی، کنتراست قوی |
-| **Accent** | فیروزه‌ای `#14b8a6` | طبیعت، سفر، طراوت |
-| **Background** | کرم گرم `#fafaf9` | راحتی چشم |
+| **Primary** | teal تیره `#0f766e` | اعتماد، تخصص، آرامش |
+| **Secondary (CTA)** | cyan `#0891b2` | اکسنت ظریف و مدرن برای دکمه‌های تبدیل |
+| **Accent** | teal `#14b8a6` | طبیعت، سفر، طراوت |
+| **Background** | نچرال روشن `#fcfcfd` | راحتی چشم، فضای سفید کافی |
+| **Border/Muted** | zinc `#e4e4e7` | لایه‌بندی نرم و شیک |
 
 **فونت:** Vazirmatn (variable, preload) — بهترین خوانایی روی موبایل
 
@@ -201,87 +203,63 @@ npm run db:studio    # Prisma Studio
 npm run db:reset     # reset دیتابیس
 ```
 
-## 🚀 دیپلوی
-## 🚀 دیپلوی روی Vercel + Neon PostgreSQL
+## 🚀 دیپلوی روی Supabase (PostgreSQL)
 
-پروژه برای دیپلوی کامل روی Vercel آماده شده است.
+پروژه برای PostgreSQL نوشته شده و Supabase دقیقاً همان است — نیازی به تغییر کد نیست.
 
-### ۱- ساخت دیتابیس PostgreSQL در Neon
+### ۱- گرفتن رشته اتصال از Supabase
 
-۱. به https://neon.tech برو و ثبت‌نام کن.
-۲. یک پروژه جدید بساز: نام `rivansafar`، region نزدیک (مثلاً `Frankfurt` یا `Stockholm`).
-۳. بعد از ساخت، از بخش **Connection Details** این دو رشته را کپی کن:
+۱. به [supabase.com/dashboard](https://supabase.com/dashboard) برو → پروژه خودت (یا بساز).
+۲. **Project Settings → Database → Connection string** → تب **URI**.
+۳. رشته‌ای شبیه این کپی کن (شامل رمز دیتابیس):
 
-| نوع | نام متغیر | کاربرد |
-|---|---|---|
-| Pooled connection | `POSTGRES_PRISMA_URL` | برای Prisma Client در runtime |
-| Direct connection | `POSTGRES_URL_NON_POOLING` | برای migration و seed |
-
-```bash
-# Pooled
-postgresql://user:password@ep-xxxxx-pooler.eu-central-1.aws.neon.tech/rivansafar?sslmode=require&pgbouncer=true&connect_timeout=10
-
-# Direct
-postgresql://user:password@ep-xxxxx.eu-central-1.aws.neon.tech/rivansafar?sslmode=require&connect_timeout=10
+```
+postgresql://postgres:YOUR_PASSWORD@db.rtrdjphgqhwugesnuobx.supabase.co:5432/postgres?sslmode=require
 ```
 
-### ۲- تنظیم Environment Variables در Vercel
+⚠️ کدهای Dashboard (Publishable / Secret / Anon / Service-role) برای اتصال دیتابیس کافی **نیستند** — فقط رشته اتصال Postgres معتبر است.
 
-در داشبورد Vercel، پروژه را باز کن و به **Settings → Environment Variables** برو. این متغیرها را اضافه کن:
+### ۲- تنظیم متغیرها
 
-| متغیر | مقدار |
-|---|---|
-| `POSTGRES_PRISMA_URL` | `postgresql://USER:PASSWORD@ep-xxxxx-pooler.eu-central-1.aws.neon.tech/rivansafar?sslmode=require&pgbouncer=true&connect_timeout=10` |
-| `POSTGRES_URL_NON_POOLING` | `postgresql://USER:PASSWORD@ep-xxxxx.eu-central-1.aws.neon.tech/rivansafar?sslmode=require&connect_timeout=10` |
-| `NEXTAUTH_SECRET` | یک رشته تصادفی قوی حداقل ۳۲ کاراکتر |
-| `NEXTAUTH_URL` | `https://your-domain.vercel.app` |
-| `NEXT_PUBLIC_SITE_URL` | `https://your-domain.vercel.app` |
-| `NEXT_PUBLIC_SITE_NAME` | `ریوان سفر` |
-
-### ۳- تنظیم Build Command
-
-در **Settings → Build and Output Settings** مطمئن شو:
+در `.env` (لوکال) یا Environment Variables پلتفرم (Vercel) این را ست کن:
 
 ```bash
-npm run vercel-build
+DATABASE_URL="postgresql://postgres:YOUR_PASSWORD@db.rtrdjphgqhwugesnuobx.supabase.co:5432/postgres?sslmode=require"
+DATABASE_URL_UNPOOLED="postgresql://postgres:YOUR_PASSWORD@db.rtrdjphgqhwugesnuobx.supabase.co:5432/postgres?sslmode=require"
 ```
 
-### ۴- اولین Deploy
+> نکته: Supabase پولرهای «Session» و «Transaction» دارد. هر دو با `?sslmode=require` کار می‌کنند.
+> کد در `src/lib/prisma.ts` پارامترهای `pgbouncer` و `channel_binding` را خودکار تنظیم می‌کند.
 
-روی **Deploy** بزن. اگر `DATABASE_URL` درست ست شده باشد، Prisma migration به طور خودکار اجرا می‌شود.
-
-### ۵- انتقال داده‌های SQLite قبلی (اختیاری)
-
-اگر می‌خواهی داده‌های `prisma/dev.db` را به Neon منتقل کنی، لوکال دستور زیر را اجرا کن:
+### ۳- اعمال schema و seed
 
 ```bash
-# .env لوکال را به Neon متصل کن
-DATABASE_URL="postgresql://USER:PASSWORD@ep-xxxxx.eu-central-1.aws.neon.tech/rivansafar?sslmode=require"
+# لوکال (با .env تنظیم‌شده به Supabase):
+npx prisma db push --accept-data-loss
+npm run seed
 
-# سپس
-npx tsx scripts/setup-vercel-db.ts
+# یا روی Vercel (Build Command = npm run vercel-build):
+# vercel-build.js خودکار db push + seed را اجرا می‌کند
 ```
 
-این دستور موارد زیر را انجام می‌دهد:
-- اعمال migrationها
-- انتقال داده از `prisma/dev.db`
-- اجرای seed
+### ۴- تنظیمات احراز هویت Supabase (اختیاری)
 
-### ۶- Seed اولیه (اگر بدون داده قبلی هستی)
+اگر می‌خواهی احراز هویت کاربران نهایی را به Supabase Auth بدهی (به‌جای JWT داخلی)،
+کدهای `SUPABASE_URL` و `SUPABASE_ANON_KEY` را در `.env` اضافه کن. فعلاً پروژه از
+احراز هویت سفارشی (JWT + bcrypt) برای پنل ادمین استفاده می‌کند.
 
-```bash
-vercel env pull
-npx prisma db seed
+---
+
+## 🚀 دیپلوی روی Vercel (اختیاری)
+
+اگر می‌خواهی روی Vercel دیپلوی کنی، متغیرها را همانند بالا ست کن و Build Command را
+`npm run vercel-build` بگذار. `vercel-build.js` موارد زیر را اجرا می‌کند:
+
 ```
-
-### ۷- بررسی نهایی
-
-بعد از deploy موفق:
-- صفحه اصلی: `https://your-domain.vercel.app`
-- پنل ادمین: `https://your-domain.vercel.app/admin/login`
-- اطلاعات ورود پیش‌فرض:
-  - ایمیل: `admin@rivansafar.com`
-  - رمز عبور: `admin123` (در production حتماً تغییر بده)
+npx prisma generate
+npx prisma db push --accept-data-loss
+next build
+```
 
 ---
 

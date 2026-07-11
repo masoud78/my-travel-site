@@ -1,53 +1,54 @@
 @import "tailwindcss";
 
 /* ============================================
-   ریوان سفر — Design System
-   روان‌شناسی رنگ: اعتماد (آبی عمیق) + اشتیاق (نارنجی) + طبیعت/سفر (فیروزه‌ای)
+   ریوان سفر — Design System (Modern Theme)
+   Modern: quiet neutrals (zinc) + refined teal/cyan accent
+   soft layered cards, crisp typography, calm spacing
    ============================================ */
 
 @theme {
   /* ---- Font ---- */
   --font-sans: var(--font-vazirmatn), system-ui, -apple-system, "Segoe UI", Tahoma, sans-serif;
 
-  /* ---- Brand Colors ---- */
-  --color-brand-50: #f0f9ff;
-  --color-brand-100: #e0f2fe;
-  --color-brand-200: #bae6fd;
-  --color-brand-300: #7dd3fc;
-  --color-brand-400: #38bdf8;
-  --color-brand-500: #0ea5e9;
-  --color-brand-600: #0284c7;
-  --color-brand-700: #0369a1;
-  --color-brand-800: #075985;
-  --color-brand-900: #0c4a6e;
-  --color-brand-950: #082f49;
+  /* ---- Brand (refined cyan — trust + travel) ---- */
+  --color-brand-50: #ecfeff;
+  --color-brand-100: #cffafe;
+  --color-brand-200: #a5f3fc;
+  --color-brand-300: #67e8f9;
+  --color-brand-400: #22d3ee;
+  --color-brand-500: #06b6d4;
+  --color-brand-600: #0891b2;
+  --color-brand-700: #0e7490;
+  --color-brand-800: #155e75;
+  --color-brand-900: #164e63;
+  --color-brand-950: #083344;
 
-  /* ---- Accent (Orange — CTA) ---- */
-  --color-accent-50: #fff7ed;
-  --color-accent-100: #ffedd5;
-  --color-accent-200: #fed7aa;
-  --color-accent-300: #fdba74;
-  --color-accent-400: #fb923c;
-  --color-accent-500: #f97316;
-  --color-accent-600: #ea580c;
-  --color-accent-700: #c2410c;
-  --color-accent-800: #9a3412;
-  --color-accent-900: #7c2d12;
+  /* ---- Accent (teal — calm, refined) ---- */
+  --color-accent-50: #f0fdfa;
+  --color-accent-100: #ccfbf1;
+  --color-accent-200: #99f6e0;
+  --color-accent-300: #5eead4;
+  --color-accent-400: #2dd4bf;
+  --color-accent-500: #14b8a6;
+  --color-accent-600: #0d9488;
+  --color-accent-700: #0f766e;
+  --color-accent-800: #115e59;
+  --color-accent-900: #134e4a;
 
-  /* ---- Teal (Accent — Travel/Nature) ---- */
+  /* ---- Teal (secondary accent) ---- */
   --color-teal-50: #f0fdfa;
   --color-teal-100: #ccfbf1;
   --color-teal-500: #14b8a6;
   --color-teal-600: #0d9488;
   --color-teal-700: #0f766e;
 
-  /* ---- Neutral (Stone — softer than slate) ---- */
-  --color-surface: #fafaf9;
-  --color-surface-soft: #f5f5f4;
-  --color-surface-mute: #e7e5e4;
-  --color-ink: #1c1917;
-  --color-ink-soft: #44403c;
-  --color-ink-mute: #78716c;
+  /* ---- Neutral (quiet zinc — softer, calmer than stone) ---- */
+  --color-surface: #fcfcfd;
+  --color-surface-soft: #f4f4f5;
+  --color-surface-mute: #e4e4e7;
+  --color-ink: #18181b;
+  --color-ink-soft: #3f3f46;
+  --color-ink-mute: #71717a;
 
   /* ---- Semantic (shadcn-compatible) ---- */
   --color-background: var(--color-surface);
@@ -56,32 +57,32 @@
   --color-card: #ffffff;
   --color-card-foreground: var(--color-ink);
 
-  --color-primary: #0c4a6e;          /* brand-900 deep trust blue */
+  --color-primary: #0f766e;          /* deep refined teal — trust */
   --color-primary-foreground: #ffffff;
-  --color-primary-50: #f0f9ff;
-  --color-primary-100: #e0f2fe;
-  --color-primary-200: #bae6fd;
-  --color-primary-300: #7dd3fc;
-  --color-primary-400: #38bdf8;
-  --color-primary-500: #0ea5e9;
-  --color-primary-600: #0284c7;
-  --color-primary-700: #0369a1;
-  --color-primary-800: #075985;
-  --color-primary-900: #0c4a6e;
-  --color-primary-950: #082f49;
+  --color-primary-50: #f0fdfa;
+  --color-primary-100: #ccfbf1;
+  --color-primary-200: #99f6e0;
+  --color-primary-300: #5eead4;
+  --color-primary-400: #2dd4bf;
+  --color-primary-500: #14b8a6;
+  --color-primary-600: #0d9488;
+  --color-primary-700: #0f766e;
+  --color-primary-800: #115e59;
+  --color-primary-900: #134e4a;
+  --color-primary-950: #042f2e;
 
-  --color-secondary: #f97316;        /* accent-500 energetic orange */
+  --color-secondary: #0891b2;        /* cyan-600 — refined CTA */
   --color-secondary-foreground: #ffffff;
-  --color-secondary-50: #fff7ed;
-  --color-secondary-100: #ffedd5;
-  --color-secondary-200: #fed7aa;
-  --color-secondary-300: #fdba74;
-  --color-secondary-400: #fb923c;
-  --color-secondary-500: #f97316;
-  --color-secondary-600: #ea580c;
-  --color-secondary-700: #c2410c;
-  --color-secondary-800: #9a3412;
-  --color-secondary-900: #7c2d12;
+  --color-secondary-50: #ecfeff;
+  --color-secondary-100: #cffafe;
+  --color-secondary-200: #a5f3fc;
+  --color-secondary-300: #67e8f9;
+  --color-secondary-400: #22d3ee;
+  --color-secondary-500: #06b6d4;
+  --color-secondary-600: #0891b2;
+  --color-secondary-700: #0e7490;
+  --color-secondary-800: #155e75;
+  --color-secondary-900: #164e63;
 
   --color-accent: #14b8a6;           /* teal-500 */
   --color-accent-foreground: #ffffff;
@@ -105,8 +106,8 @@
   --color-popover: #ffffff;
   --color-popover-foreground: var(--color-ink);
 
-  --color-input: #e7e5e4;
-  --color-border: #e7e5e4;
+  --color-input: #e4e4e7;
+  --color-border: #e4e4e7;
   --color-ring: var(--color-primary-500);
 
   /* ---- Semantic ---- */
@@ -122,10 +123,10 @@
   --radius-xl: 1.5rem;
   --radius-2xl: 2rem;
 
-  /* ---- Shadow ---- */
-  --shadow-soft: 0 1px 2px 0 rgb(0 0 0 / 0.05), 0 1px 3px 0 rgb(0 0 0 / 0.05);
-  --shadow-card: 0 4px 6px -1px rgb(12 74 110 / 0.08), 0 2px 4px -2px rgb(12 74 110 / 0.04);
-  --shadow-float: 0 20px 25px -5px rgb(12 74 110 / 0.12), 0 8px 10px -6px rgb(12 74 110 / 0.06);
+  /* ---- Shadow (softer, layered) ---- */
+  --shadow-soft: 0 1px 2px 0 rgb(15 23 42 / 0.04), 0 1px 3px 0 rgb(15 23 42 / 0.03);
+  --shadow-card: 0 1px 3px 0 rgb(15 23 42 / 0.06), 0 1px 2px -1px rgb(15 23 42 / 0.04);
+  --shadow-float: 0 12px 32px -12px rgb(15 23 42 / 0.14), 0 4px 8px -4px rgb(15 23 42 / 0.06);
 }
 
 /* ============================================
@@ -297,28 +298,37 @@ body:has(.safe-area-inset-bottom) {
    Persian (Jalali) Date Picker Theming
    ============================================ */
 .jalali-datepicker {
-  --cd-color-primary: var(--color-primary-700, #0369a1);
-  --cd-color-secondary: var(--color-primary-50, #f0f9ff);
-  --cd-color-accent: var(--color-accent-500, #f97316);
+  --cd-color-primary: var(--color-primary-700, #0f766e);
+  --cd-color-secondary: var(--color-primary-50, #f0fdfa);
+  --cd-color-accent: var(--color-accent-600, #0d9488);
   --cd-color-bg: #ffffff;
-  --cd-color-text: #1c1917;
-  --cd-color-gray: #78716c;
+  --cd-color-text: #18181b;
+  --cd-color-gray: #71717a;
   --cd-color-success: #14b8a6;
   --cd-color-danger: #ef4444;
-  --cd-day-width: 36px;
-  --cd-day-height: 36px;
-  --cd-day-font: 14px;
+  --cd-day-width: 34px;
+  --cd-day-height: 34px;
+  --cd-day-font: 13px;
   font-family: var(--font-sans);
 }
+/* Calendar popup above all content */
 .jalali-datepicker-modal {
   transform: translateX(-50%) !important;
+  z-index: 9999 !important;
+}
+.jalali-datepicker .datepicker-calendar {
+  z-index: 9999 !important;
+}
+/* Ensure dropdown has lower z-index than calendar */
+.dest-dropdown {
+  z-index: 40 !important;
 }
 
-/* Hero gradient pattern */
+/* Hero gradient pattern (modern, calm) */
 .hero-pattern {
   background-image:
-    radial-gradient(circle at 20% 30%, rgba(14, 165, 233, 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 80% 70%, rgba(249, 115, 22, 0.12) 0%, transparent 50%);
+    radial-gradient(circle at 20% 30%, rgba(20, 184, 166, 0.12) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(8, 145, 178, 0.10) 0%, transparent 50%);
 }
 
 /* Hero floating shapes */
